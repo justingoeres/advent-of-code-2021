@@ -120,7 +120,7 @@ function main() {
   colour_init
   #lock_init system
 
-  YEAR=2020
+  YEAR=2021
   puzzleInputFile="data/day$day/input.txt"
   srcDir=src/main/java/org/jgoeres/adventofcode$YEAR/Day$day
   testDir=src/test/java/org/jgoeres/adventofcode$YEAR
