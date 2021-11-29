@@ -4,11 +4,11 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.jgoeres.adventofcode2020</groupId>
-  <artifactId>adventofcode-2020-jgoeres</artifactId>
+  <groupId>org.jgoeres.adventofcode2021</groupId>
+  <artifactId>adventofcode-2021-jgoeres</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>adventofcode-2020-jgoeres</name>
+  <name>adventofcode-2021-jgoeres</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
