@@ -1,4 +1,5 @@
 package org.jgoeres.adventofcode2021.Day01;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -23,8 +24,16 @@ public class Day01Service {
         System.out.println("=== DAY 01A ===");
 
         long result = 0;
-        /** Put problem implementation here **/
-
+        long previous = inputList.get(0);
+        /** count the number of times a depth measurement increases from the previous measurement. **/
+        for (int i = 1; i < inputList.size(); i++) {
+            // compare depth[i] to the previous depth[i-1]
+            long current = inputList.get(i);
+            if (current > previous) {
+                result++;
+            }
+            previous = current;
+        }
         System.out.println("Day 01A: Answer = " + result);
         return result;
     }
@@ -33,8 +42,23 @@ public class Day01Service {
         System.out.println("=== DAY 01B ===");
 
         long result = 0;
-        /** Put problem implementation here **/
+        /** Consider sums of a three-measurement sliding window. How many sums are larger than the previous sum?
+         **/
 
+        // Two sliding three-measurement windows offset by one have two values in common:
+        //      A B C
+        //        B C D
+        // so A + B + C > B + C + D if A > D. That's all we have to check
+        long previous = inputList.get(0);
+        /** count the number of times a depth measurement increases from the previous measurement. **/
+        for (int i = 3; i < inputList.size(); i++) {
+            // compare depth[i] to the previous depth[i-1]
+            long current = inputList.get(i);
+            if (current > previous) {
+                result++;
+            }
+            previous = inputList.get(i - 2);
+        }
         System.out.println("Day 01B: Answer = " + result);
         return result;
     }
@@ -49,12 +73,8 @@ public class Day01Service {
             Pattern p = Pattern.compile("([FB]{7})([LR]{3})");
             while ((line = br.readLine()) != null) {
                 // process the line.
-                Matcher m = p.matcher(line);
-                if (m.find()) { // If our regex matched this line
-                    // Parse it
-                    String field1 = m.group(1);
-                    String field2 = m.group(2);
-                }
+                Integer depth = Integer.parseInt(line);
+                inputList.add(depth);
             }
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());

@@ -3,6 +3,7 @@ package org.jgoeres.adventofcode2021;
 import org.jgoeres.adventofcode2021.Day01.Day01Service;
 import org.jgoeres.adventofcode.common.ToClipboard;
 import org.junit.jupiter.api.*;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -20,7 +21,7 @@ public class Day01Test {
     @Test
     @Order(1)   // Run before Puzzle Part B
     public void Day01A() {
-        final long EXPECTED = 0;
+        final long EXPECTED = 1711;
         long result = 0;
         try {
             result = day01Service.doPartA();
@@ -34,43 +35,11 @@ public class Day01Test {
     @Test
     @Order(2)   // Run after Puzzle Part A
     public void Day01B() {
-        final long EXPECTED = 0;
+        final long EXPECTED = 1743;
         long result = 0;
         try {
             result = day01Service.doPartB();
             ToClipboard.set(result);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        assertEquals(EXPECTED, result);
-    }
-
-    @Test
-    @Order(3)   // Run before Example Part B
-    @Disabled
-    public void Day01AExample1() {
-        example1Service = new Day01Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
-        final long EXPECTED = 0;
-        long result = 0;
-        try {
-            result = day01Service.doPartA();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        assertEquals(EXPECTED, result);
-    }
-
-    @Test
-    @Order(4)   // Run after Example Part A
-    @Disabled
-    public void Day01BExample1() {
-        // Instantiate the service if Part A was skipped
-        if (example1Service == null) example1Service = new Day01Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
-
-        final long EXPECTED = 0;
-        long result = 0;
-        try {
-            result = day01Service.doPartB();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
