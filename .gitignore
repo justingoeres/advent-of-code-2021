@@ -148,3 +148,7 @@ Temporary Items
 target/
 
 .idea/sbt.xml
+
+.idea/misc.xml
+
+.idea/aws.xml
