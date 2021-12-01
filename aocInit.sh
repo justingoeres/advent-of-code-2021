@@ -45,7 +45,7 @@ function parse_params() {
     shift
     case $param in
     -d | --day)
-      raw_day="$1" # Pretty version of the day for e.g. git commits
+      pretty_day="$1" # Pretty version of the day for e.g. git commits
       day="$1"
       # Add leading zero if necessary
       if [ "$day" -lt "10" ]; then
@@ -94,11 +94,11 @@ function instantiateTemplate() {
 
   # Replace all instances of ${AOC_DAY} with $day
   # and write the modified file out to $targetFile
-  sed -e "s/\${AOC_DAY}/$day/g" -e "s/\${AOC_YEAR}/$YEAR/g" $sourceFile >$targetFile
+  sed -e "s/\${AOC_DAY}/$day/g" -e "s/\${AOC_PRETTY_DAY}/$pretty_day/g" -e "s/\${AOC_YEAR}/$YEAR/g" $sourceFile >$targetFile
 }
 
 function get_problem_input() {
-  pretty_print "Downloading$ta_bold Day $raw_day$ta_none$fg_magenta puzzle input" $fg_magenta
+  pretty_print "Downloading$ta_bold Day $pretty_day$ta_none$fg_magenta puzzle input" $fg_magenta
 
   mkdir -p $(dirname "$puzzleInputFile")
   resources/aocdl -year $YEAR -day $day -output "$puzzleInputFile"
@@ -159,7 +159,7 @@ function main() {
     if [[ -z ${no_templates-} ]]; then
       git add "$srcDir/$outputFile2" "$testDir/$outputFile3"
     fi
-    git commit -m "Day $raw_day Init from aocInit.sh"
+    git commit -m "Day $pretty_day Init from aocInit.sh"
   else
     pretty_print "Committing...$ta_bold  [SKIPPED]" $fg_yellow
   fi

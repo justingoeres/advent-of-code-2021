@@ -20,22 +20,22 @@ public class Day${AOC_DAY}Service {
     }
 
     public long doPartA() {
-        System.out.println("=== DAY ${AOC_DAY}A ===");
+        System.out.println("=== DAY ${AOC_PRETTY_DAY}A ===");
 
         long result = 0;
         /** Put problem implementation here **/
 
-        System.out.println("Day ${AOC_DAY}A: Answer = " + result);
+        System.out.println("Day ${AOC_PRETTY_DAY}A: Answer = " + result);
         return result;
     }
 
     public long doPartB() {
-        System.out.println("=== DAY ${AOC_DAY}B ===");
+        System.out.println("=== DAY ${AOC_PRETTY_DAY}B ===");
 
         long result = 0;
         /** Put problem implementation here **/
 
-        System.out.println("Day ${AOC_DAY}B: Answer = " + result);
+        System.out.println("Day ${AOC_PRETTY_DAY}B: Answer = " + result);
         return result;
     }
 
