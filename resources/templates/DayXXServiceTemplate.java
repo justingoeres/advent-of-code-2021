@@ -1,4 +1,4 @@
-package org.jgoeres.adventofcode2020.Day${AOC_DAY};
+package org.jgoeres.adventofcode${AOC_YEAR}.Day${AOC_DAY};
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ public class Day${AOC_DAY}Service {
     }
 
     public Day${AOC_DAY}Service(String pathToFile, boolean debug) {
-        loadInputs(pathToFile)
+        loadInputs(pathToFile);
         DEBUG = debug;
     }
 

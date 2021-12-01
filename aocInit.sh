@@ -94,7 +94,7 @@ function instantiateTemplate() {
 
   # Replace all instances of ${AOC_DAY} with $day
   # and write the modified file out to $targetFile
-  sed "s/\${AOC_DAY}/$day/g" $sourceFile >$targetFile
+  sed -e "s/\${AOC_DAY}/$day/g" -e "s/\${AOC_YEAR}/$YEAR/g" $sourceFile >$targetFile
 }
 
 function get_problem_input() {
@@ -157,7 +157,7 @@ function main() {
       git add "$puzzleInputFile"
     fi
     if [[ -z ${no_templates-} ]]; then
-      git add "$srcDir/$outputFile1" "$srcDir/$outputFile2" "$testDir/$outputFile3"
+      git add "$srcDir/$outputFile2" "$testDir/$outputFile3"
     fi
     git commit -m "Day $raw_day Init from aocInit.sh"
   else

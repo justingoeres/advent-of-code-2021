@@ -1,6 +1,6 @@
-package org.jgoeres.adventofcode2020;
+package org.jgoeres.adventofcode${AOC_YEAR};
 
-import org.jgoeres.adventofcode2020.Day${AOC_DAY}.Day${AOC_DAY}Service;
+import org.jgoeres.adventofcode${AOC_YEAR}.Day${AOC_DAY}.Day${AOC_DAY}Service;
 import org.jgoeres.adventofcode.common.ToClipboard;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
