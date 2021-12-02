@@ -25,11 +25,11 @@ public class Day02Service {
     public long doPartA() {
         System.out.println("=== DAY 2A ===");
 
-        final Submarine2DLocation subLocation = new Submarine2DLocation(); // starts at 0,0
         /** Calculate the horizontal position and depth you would have after following
          *  the planned course. What do you get if you multiply your final horizontal
          *  position by your final depth?
          **/
+        final Submarine2DLocation subLocation = new Submarine2DLocation(); // starts at 0,0
 
         // Process the steps
         inputList.stream()
@@ -45,9 +45,32 @@ public class Day02Service {
     public long doPartB() {
         System.out.println("=== DAY 2B ===");
 
-        long result = 0;
-        /** Put problem implementation here **/
+        /** In addition to horizontal position and depth, you'll also need to track a third value,
+         * aim, which also starts at 0.
+         *
+         * The commands also mean something entirely different than you first thought:
+         * - down X increases your aim by X units.
+         * - up X decreases your aim by X units.
+         *
+         * forward X does two things:
+         * - It increases your horizontal position by X units.
+         * - It increases your depth by your aim multiplied by X.
+         *
+         * Using this new interpretation of the commands, calculate the horizontal position and
+         * depth you would have after following the planned course.
+         *
+         * What do you get if you multiply
+         * your final horizontal position by your final depth?
+         **/
+        final Submarine2DWithAim subLocation = new Submarine2DWithAim(); // starts at 0,0
 
+        // Process the steps
+        inputList.stream()
+                .forEach(step -> subLocation.move(step.getDirection(), step.getDistance()));
+
+        System.out.println(MessageFormat.format("Final location:\tforward = {0}\tdepth = {1}",
+                subLocation.getLocation().getX(), subLocation.getLocation().getY()));
+        final long result = subLocation.getLocation().getX() * subLocation.getLocation().getY();
         System.out.println("Day 2B: Answer = " + result);
         return result;
     }

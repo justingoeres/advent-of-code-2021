@@ -23,7 +23,6 @@ public class Day02Test {
         final long EXPECTED = 1989265;
         long result = 0;
         try {
-            // 332928 too low
             result = day02Service.doPartA();
             ToClipboard.set(result);
         } catch (Exception e) {
@@ -35,7 +34,7 @@ public class Day02Test {
     @Test
     @Order(2)   // Run after Puzzle Part A
     public void Day02B() {
-        final long EXPECTED = 0;
+        final long EXPECTED = 2089174012;
         long result = 0;
         try {
             result = day02Service.doPartB();
@@ -54,7 +53,7 @@ public class Day02Test {
         final long EXPECTED = 0;
         long result = 0;
         try {
-            result = day02Service.doPartA();
+            result = example1Service.doPartA();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -63,15 +62,14 @@ public class Day02Test {
 
     @Test
     @Order(4)   // Run after Example Part A
-    @Disabled
     public void Day02BExample1() {
         // Instantiate the service if Part A was skipped
         if (example1Service == null) example1Service = new Day02Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
 
-        final long EXPECTED = 0;
+        final long EXPECTED = 900;
         long result = 0;
         try {
-            result = day02Service.doPartB();
+            result = example1Service.doPartB();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

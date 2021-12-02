@@ -27,4 +27,12 @@ public class Submarine2DLocation {
     public XYPoint getLocation() {
         return location;
     }
+
+    public Integer getForwardLocation() {
+        return location.getX();
+    }
+
+    public Integer getDepth() {
+        return location.getY();
+    }
 }
