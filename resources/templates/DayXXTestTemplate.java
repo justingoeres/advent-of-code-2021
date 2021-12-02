@@ -53,7 +53,7 @@ public class Day${AOC_DAY}Test {
         final long EXPECTED = 0;
         long result = 0;
         try {
-            result = day${AOC_DAY}Service.doPartA();
+            result = example1Service.doPartA();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -70,7 +70,7 @@ public class Day${AOC_DAY}Test {
         final long EXPECTED = 0;
         long result = 0;
         try {
-            result = day${AOC_DAY}Service.doPartB();
+            result = example1Service.doPartB();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
