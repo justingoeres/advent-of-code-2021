@@ -20,9 +20,10 @@ public class Day02Test {
     @Test
     @Order(1)   // Run before Puzzle Part B
     public void Day02A() {
-        final long EXPECTED = 0;
+        final long EXPECTED = 1989265;
         long result = 0;
         try {
+            // 332928 too low
             result = day02Service.doPartA();
             ToClipboard.set(result);
         } catch (Exception e) {
