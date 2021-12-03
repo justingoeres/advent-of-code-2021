@@ -34,7 +34,7 @@ public class Day03Test {
     @Test
     @Order(2)   // Run after Puzzle Part A
     public void Day03B() {
-        final long EXPECTED = 0;
+        final long EXPECTED = 1032597;
         long result = 0;
         try {
             result = day03Service.doPartB();
@@ -66,7 +66,7 @@ public class Day03Test {
         // Instantiate the service if Part A was skipped
         if (example1Service == null) example1Service = new Day03Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
 
-        final long EXPECTED = 0;
+        final long EXPECTED = 230;
         long result = 0;
         try {
             result = example1Service.doPartB();
