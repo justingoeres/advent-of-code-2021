@@ -39,7 +39,7 @@ public class Day04Service {
         // Draw balls
         for (Integer ball : drawOrder) {
 //            System.out.println("Drawing ball:\t" + ball);
-                // Mark cards
+            // Mark cards
             for (BingoCard card : bingoCards) {
                 // Check each card for the presence of a spot
                 if (card.hasValue(ball)) {
@@ -63,10 +63,45 @@ public class Day04Service {
     public long doPartB() {
         System.out.println("=== DAY 4B ===");
 
+        // reset all the cards, in case we just did Part A
+        bingoCards.stream().forEach(card -> card.reset());
+
         long result = 0;
         /** Let the squid win!
          * Figure out which board will win LAST
          **/
+
+        final List<BingoCard> toRemove = new ArrayList<>();
+        // Play the game like in Part A
+        // Draw balls
+        for (Integer ball : drawOrder) {
+//            System.out.println("Drawing ball:\t" + ball);
+            // Mark cards
+            for (BingoCard card : bingoCards) {
+                // Check each card for the presence of a spot
+                if (card.hasValue(ball)) {
+                    // Mark it!
+                    card.setMarked(ball);
+//                    card.printCard();
+                    // Then check if this card is a winner
+                    if (card.isWinner()) {
+                        // If the card is a winner, mark it
+                        // for REMOVAL from the remaining cards in play
+                        toRemove.add(card);
+                        // However, if this is the LAST card to win,
+                        // we're done!
+                        if (bingoCards.size() == 1) {
+                            result = bingoCards.get(0).calculateScore(ball);
+                            System.out.println("Day 4B: Answer = " + result);
+                            return result;
+                        }
+                    }
+                }
+            }
+            // After we've checked all the cards, remove the winners
+            bingoCards.removeAll(toRemove);
+            toRemove.clear();
+        }
 
 
         System.out.println("Day 4B: Answer = " + result);

@@ -40,7 +40,7 @@ public class Day04Test {
         if (day04Service == null) {
             day04Service = new Day04Service(PUZZLE_INPUT, PUZZLE_DEBUG);
         }
-        final long EXPECTED = 0;
+        final long EXPECTED = 4624;
         long result = 0;
         try {
             result = day04Service.doPartB();
@@ -53,7 +53,6 @@ public class Day04Test {
 
     @Test
     @Order(3)   // Run before Example Part B
-    @Disabled
     public void Day04AExample1() {
         example1Service = new Day04Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
         final long EXPECTED = 4512;
@@ -68,14 +67,13 @@ public class Day04Test {
 
     @Test
     @Order(4)   // Run after Example Part A
-    @Disabled
     public void Day04BExample1() {
         // Instantiate the service if Part A was skipped
         if (example1Service == null) {
             example1Service = new Day04Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
         }
 
-        final long EXPECTED = 0;
+        final long EXPECTED = 1924;
         long result = 0;
         try {
             result = example1Service.doPartB();

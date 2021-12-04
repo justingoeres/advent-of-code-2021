@@ -24,10 +24,6 @@ public class BingoCard {
         return values.contains(value);
     }
 
-    public Boolean isMarked(XYPoint spot) {
-        return xyMarked.contains(spot);
-    }
-
     public void setMarked(Integer value) {
         // Find the XY spot that has this value, and set it to marked
         xyMarked.add(valueToXy.get(value));
@@ -82,6 +78,14 @@ public class BingoCard {
 
     public void setSize(Integer size) {
         this.size = size;
+    }
+
+    public void reset() {
+        // To reset the card, move all the marked points
+        // back to the unmarked 'values'
+        // Unmark everything
+        xyMarked.clear();
+        values.addAll(valueToXy.keySet());
     }
 
     public void printCard() {
