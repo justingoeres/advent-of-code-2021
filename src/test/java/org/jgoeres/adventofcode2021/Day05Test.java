@@ -10,7 +10,7 @@ public class Day05Test {
     // Puzzle
     private final String PUZZLE_INPUT = "data/day05/input.txt";
     private final boolean PUZZLE_DEBUG = false;
-    private final Day05Service day05Service = new Day05Service(PUZZLE_INPUT, PUZZLE_DEBUG);
+    private Day05Service day05Service = null;
 
     // Examples
     private final String EXAMPLE1_INPUT = "data/day05/example1.txt";
@@ -18,31 +18,29 @@ public class Day05Test {
     private Day05Service example1Service = null;
 
     @Test
-    @Order(1)   // Run before Puzzle Part B
-    public void Day05A() {
-        final long EXPECTED = 6461;
+    public void Day05() {
+        if (day05Service == null) {
+            day05Service = new Day05Service(PUZZLE_INPUT, PUZZLE_DEBUG);
+        }
+        final long PARTA_EXPECTED = 6461;
         long result = 0;
+        // Part A
         try {
             result = day05Service.doPartA();
             ToClipboard.set(result);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        assertEquals(EXPECTED, result);
-    }
+        assertEquals(PARTA_EXPECTED, result);
 
-    @Test
-    @Order(2)   // Run after Puzzle Part A
-    public void Day05B() {
-        final long EXPECTED = 18065;
-        long result = 0;
+        final long PARTB_EXPECTED = 18065;
         try {
             result = day05Service.doPartB();
             ToClipboard.set(result);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        assertEquals(EXPECTED, result);
+        assertEquals(PARTB_EXPECTED, result);
     }
 
     @Test
@@ -65,7 +63,9 @@ public class Day05Test {
     @Disabled
     public void Day05BExample1() {
         // Instantiate the service if Part A was skipped
-        if (example1Service == null) example1Service = new Day05Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
+        if (example1Service == null) {
+            example1Service = new Day05Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
+        }
 
         final long EXPECTED = 0;
         long result = 0;

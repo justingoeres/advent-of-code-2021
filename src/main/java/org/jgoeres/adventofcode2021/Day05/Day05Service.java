@@ -33,40 +33,44 @@ public class Day05Service {
         /** Consider only horizontal and vertical lines.
          * At how many points do at least two lines overlap? **/
 
-        for (VentDefinition vent : inputList) {
-            if (vent.getDirection() == HORIZONTAL) {
-                int x1 = Math.min(vent.getStart().getX(), vent.getEnd().getX());
-                int x2 = Math.max(vent.getStart().getX(), vent.getEnd().getX());
-                int y = vent.getStart().getY();
-                for (int x = x1; x <= x2; x++) {
-                    XYPoint ventLocation = new XYPoint(x, y);
-                    if (vents.containsKey(ventLocation)) {
-                        // if the vent already exists, increment it
-                        vents.compute(ventLocation, (key, value) ->
-                                value + 1);
-                    } else {
-                        // if the vent doesn't exist, add it
-                        vents.put(ventLocation, 1);
-                    }
-
-                }
-            } else if (vent.getDirection() == VERTICAL) {
-                int y1 = Math.min(vent.getStart().getY(), vent.getEnd().getY());
-                int y2 = Math.max(vent.getStart().getY(), vent.getEnd().getY());
-                int x = vent.getStart().getX();
-                for (int y = y1; y <= y2; y++) {
-                    XYPoint ventLocation = new XYPoint(x, y);
-                    if (vents.containsKey(ventLocation)) {
-                        // if the vent already exists, increment it
-                        vents.compute(ventLocation, (key, value) ->
-                                value + 1);
-                    } else {
-                        // if the vent doesn't exist, add it
-                        vents.put(ventLocation, 1);
-                    }
+        // do horizontal
+        for (VentDefinition vent : inputList.stream().filter(p -> p.getDirection() == HORIZONTAL)
+                .collect(Collectors.toList())) {
+            int x1 = Math.min(vent.getStart().getX(), vent.getEnd().getX());
+            int x2 = Math.max(vent.getStart().getX(), vent.getEnd().getX());
+            int y = vent.getStart().getY();
+            for (int x = x1; x <= x2; x++) {
+                XYPoint ventLocation = new XYPoint(x, y);
+                if (vents.containsKey(ventLocation)) {
+                    // if the vent already exists, increment it
+                    vents.compute(ventLocation, (key, value) ->
+                            value + 1);
+                } else {
+                    // if the vent doesn't exist, add it
+                    vents.put(ventLocation, 1);
                 }
             }
         }
+
+        // do vertical
+        for (VentDefinition vent : inputList.stream().filter(p -> p.getDirection() == VERTICAL)
+                .collect(Collectors.toList())) {
+            int y1 = Math.min(vent.getStart().getY(), vent.getEnd().getY());
+            int y2 = Math.max(vent.getStart().getY(), vent.getEnd().getY());
+            int x = vent.getStart().getX();
+            for (int y = y1; y <= y2; y++) {
+                XYPoint ventLocation = new XYPoint(x, y);
+                if (vents.containsKey(ventLocation)) {
+                    // if the vent already exists, increment it
+                    vents.compute(ventLocation, (key, value) ->
+                            value + 1);
+                } else {
+                    // if the vent doesn't exist, add it
+                    vents.put(ventLocation, 1);
+                }
+            }
+        }
+
         // When we're done mapping the floor, add up all the spots with more than one vent
         long result = vents.entrySet().stream().filter(p -> p.getValue() > 1).count();
 
@@ -76,9 +80,7 @@ public class Day05Service {
 
     public long doPartB() {
         System.out.println("=== DAY 5B ===");
-
-        /** Now do the same thing, but include diagonal vents **/
-
+        /** Do the same thing as Part A, but include diagonal vents **/
         // If the vents map is empty, do part A first
         if (vents.isEmpty()) {
             doPartA();
