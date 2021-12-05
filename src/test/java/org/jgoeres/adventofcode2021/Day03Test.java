@@ -10,7 +10,6 @@ public class Day03Test {
     // Puzzle
     private final String PUZZLE_INPUT = "data/day03/input.txt";
     private final boolean PUZZLE_DEBUG = false;
-    private final Day03Service day03Service = new Day03Service(PUZZLE_INPUT, PUZZLE_DEBUG);
 
     // Examples
     private final String EXAMPLE1_INPUT = "data/day03/example1.txt";
@@ -19,8 +18,10 @@ public class Day03Test {
 
     @Test
     @Order(1)   // Run before Puzzle Part B
-    public void Day03A() {
-        final long EXPECTED = 1997414;
+    public void Day03() {
+        final Day03Service day03Service = new Day03Service(PUZZLE_INPUT, PUZZLE_DEBUG);
+
+        final long PARTA_EXPECTED = 1997414;
         long result = 0;
         try {
             result = day03Service.doPartA();
@@ -28,21 +29,16 @@ public class Day03Test {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        assertEquals(EXPECTED, result);
-    }
+        assertEquals(PARTA_EXPECTED, result);
 
-    @Test
-    @Order(2)   // Run after Puzzle Part A
-    public void Day03B() {
-        final long EXPECTED = 1032597;
-        long result = 0;
+        final long PARTB_EXPECTED = 1032597;
         try {
             result = day03Service.doPartB();
             ToClipboard.set(result);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        assertEquals(EXPECTED, result);
+        assertEquals(PARTB_EXPECTED, result);
     }
 
     @Test

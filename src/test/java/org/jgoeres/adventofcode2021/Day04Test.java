@@ -19,11 +19,11 @@ public class Day04Test {
 
     @Test
     @Order(1)   // Run before Puzzle Part B
-    public void Day04A() {
+    public void Day04() {
         if (day04Service == null) {
             day04Service = new Day04Service(PUZZLE_INPUT, PUZZLE_DEBUG);
         }
-        final long EXPECTED = 65325;
+        final long PARTA_EXPECTED = 65325;
         long result = 0;
         try {
             result = day04Service.doPartA();
@@ -31,24 +31,16 @@ public class Day04Test {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        assertEquals(EXPECTED, result);
-    }
+        assertEquals(PARTA_EXPECTED, result);
 
-    @Test
-    @Order(2)   // Run after Puzzle Part A
-    public void Day04B() {
-        if (day04Service == null) {
-            day04Service = new Day04Service(PUZZLE_INPUT, PUZZLE_DEBUG);
-        }
-        final long EXPECTED = 4624;
-        long result = 0;
+        final long PARTB_EXPECTED = 4624;
         try {
             result = day04Service.doPartB();
             ToClipboard.set(result);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        assertEquals(EXPECTED, result);
+        assertEquals(PARTB_EXPECTED, result);
     }
 
     @Test
@@ -63,23 +55,13 @@ public class Day04Test {
             System.out.println(e.getMessage());
         }
         assertEquals(EXPECTED, result);
-    }
 
-    @Test
-    @Order(4)   // Run after Example Part A
-    public void Day04BExample1() {
-        // Instantiate the service if Part A was skipped
-        if (example1Service == null) {
-            example1Service = new Day04Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
-        }
-
-        final long EXPECTED = 1924;
-        long result = 0;
+        final long PARTB_EXPECTED = 1924;
         try {
             result = example1Service.doPartB();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        assertEquals(EXPECTED, result);
+        assertEquals(PARTB_EXPECTED, result);
     }
 }
