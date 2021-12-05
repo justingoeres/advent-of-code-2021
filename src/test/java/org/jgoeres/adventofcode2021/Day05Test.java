@@ -20,7 +20,7 @@ public class Day05Test {
     @Test
     @Order(1)   // Run before Puzzle Part B
     public void Day05A() {
-        final long EXPECTED = 0;
+        final long EXPECTED = 6461;
         long result = 0;
         try {
             result = day05Service.doPartA();
