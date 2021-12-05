@@ -4,16 +4,19 @@ import static org.jgoeres.adventofcode2021.Day05.Direction.*;
 import org.jgoeres.adventofcode.common.XYPoint;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Day05Service {
     public boolean DEBUG = false;
 
     private ArrayList<VentDefinition> inputList = new ArrayList<>();
+    private Map<XYPoint, Integer> vents = new HashMap<>();
 
     public Day05Service(String pathToFile) {
         loadInputs(pathToFile);
@@ -29,7 +32,6 @@ public class Day05Service {
 
         /** Consider only horizontal and vertical lines.
          * At how many points do at least two lines overlap? **/
-        Map<XYPoint, Integer> vents = new HashMap<>();
 
         for (VentDefinition vent : inputList) {
             if (vent.getDirection() == HORIZONTAL) {
@@ -42,9 +44,6 @@ public class Day05Service {
                         // if the vent already exists, increment it
                         vents.compute(ventLocation, (key, value) ->
                                 value + 1);
-                        System.out.println(
-                                "new value:\t" + ventLocation.getX() + ", " + ventLocation.getY() +
-                                        "\t" + vents.get(ventLocation));
                     } else {
                         // if the vent doesn't exist, add it
                         vents.put(ventLocation, 1);
@@ -61,9 +60,6 @@ public class Day05Service {
                         // if the vent already exists, increment it
                         vents.compute(ventLocation, (key, value) ->
                                 value + 1);
-                        System.out.println(
-                                "new value:\t" + ventLocation.getX() + ", " + ventLocation.getY() +
-                                        "\t" + vents.get(ventLocation));
                     } else {
                         // if the vent doesn't exist, add it
                         vents.put(ventLocation, 1);
@@ -81,9 +77,50 @@ public class Day05Service {
     public long doPartB() {
         System.out.println("=== DAY 5B ===");
 
-        long result = 0;
-        /** Put problem implementation here **/
+        /** Now do the same thing, but include diagonal vents **/
 
+        // If the vents map is empty, do part A first
+        if (vents.isEmpty()) {
+            doPartA();
+        }
+
+        // We already have the horizontal & vertical vents mapped, so just do the diagonals now
+        for (VentDefinition vent : inputList.stream().filter(p -> p.getDirection() == DIAGONAL)
+                .collect(Collectors.toList())) {
+            // Figure out whether the row points up-and-right or down-and-right
+            // Start at the left end (minimum x)
+            Integer x1 = vent.getStart().getX();
+            Integer x2 = vent.getEnd().getX();
+            XYPoint start, end;
+            if (x1 < x2) {
+                // The vent's "start" point is leftmost,
+                start = vent.getStart();
+                end = vent.getEnd();
+            } else {
+                // The vent's "end" point is leftmost
+                start = vent.getEnd();
+                end = vent.getStart();
+            }
+            // Now walk from the start (leftmost) point to the end (rightmost)
+            int y = start.getY();
+            int yDirection = Integer.signum(end.getY() - y);
+            for (int x = start.getX(); x <= end.getX(); x++) {
+                XYPoint ventLocation = new XYPoint(x, y);
+                if (vents.containsKey(ventLocation)) {
+                    // if the vent already exists, increment it
+                    vents.compute(ventLocation, (key, value) ->
+                            value + 1);
+                } else {
+                    // if the vent doesn't exist, add it
+                    vents.put(ventLocation, 1);
+                }
+                // We're going to increment x, but we also need
+                // to increment y because we're moving diagonally
+                y += yDirection;
+            }
+        }
+        // When we're done mapping the floor, add up all the spots with more than one vent
+        long result = vents.entrySet().stream().filter(p -> p.getValue() > 1).count();
         System.out.println("Day 5B: Answer = " + result);
         return result;
     }

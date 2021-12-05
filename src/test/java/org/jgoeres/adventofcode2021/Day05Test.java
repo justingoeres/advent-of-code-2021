@@ -34,7 +34,7 @@ public class Day05Test {
     @Test
     @Order(2)   // Run after Puzzle Part A
     public void Day05B() {
-        final long EXPECTED = 0;
+        final long EXPECTED = 18065;
         long result = 0;
         try {
             result = day05Service.doPartB();
