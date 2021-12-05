@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Day05Service {
     public boolean DEBUG = false;
@@ -39,17 +40,17 @@ public class Day05Service {
             int x1 = Math.min(vent.getStart().getX(), vent.getEnd().getX());
             int x2 = Math.max(vent.getStart().getX(), vent.getEnd().getX());
             int y = vent.getStart().getY();
-            for (int x = x1; x <= x2; x++) {
-                XYPoint ventLocation = new XYPoint(x, y);
-                if (vents.containsKey(ventLocation)) {
-                    // if the vent already exists, increment it
-                    vents.compute(ventLocation, (key, value) ->
-                            value + 1);
-                } else {
-                    // if the vent doesn't exist, add it
-                    vents.put(ventLocation, 1);
-                }
-            }
+            IntStream.rangeClosed(x1, x2).mapToObj(x -> new XYPoint(x, y))
+                    .forEach(ventLocation -> {
+                        if (vents.containsKey(ventLocation)) {
+                            // if the vent already exists, increment it
+                            vents.compute(ventLocation, (key, value) ->
+                                    value + 1);
+                        } else {
+                            // if the vent doesn't exist, add it
+                            vents.put(ventLocation, 1);
+                        }
+                    });
         }
 
         // do vertical
@@ -58,17 +59,17 @@ public class Day05Service {
             int y1 = Math.min(vent.getStart().getY(), vent.getEnd().getY());
             int y2 = Math.max(vent.getStart().getY(), vent.getEnd().getY());
             int x = vent.getStart().getX();
-            for (int y = y1; y <= y2; y++) {
-                XYPoint ventLocation = new XYPoint(x, y);
-                if (vents.containsKey(ventLocation)) {
-                    // if the vent already exists, increment it
-                    vents.compute(ventLocation, (key, value) ->
-                            value + 1);
-                } else {
-                    // if the vent doesn't exist, add it
-                    vents.put(ventLocation, 1);
-                }
-            }
+            IntStream.rangeClosed(y1, y2).mapToObj(y -> new XYPoint(x, y))
+                    .forEach(ventLocation -> {
+                        if (vents.containsKey(ventLocation)) {
+                            // if the vent already exists, increment it
+                            vents.compute(ventLocation, (key, value) ->
+                                    value + 1);
+                        } else {
+                            // if the vent doesn't exist, add it
+                            vents.put(ventLocation, 1);
+                        }
+                    });
         }
 
         // When we're done mapping the floor, add up all the spots with more than one vent
