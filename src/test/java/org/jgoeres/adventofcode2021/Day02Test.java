@@ -19,7 +19,7 @@ public class Day02Test {
 
     @Test
     @Order(1)   // Run before Puzzle Part B
-    public void Day02A() {
+    public void Day02() {
         final long EXPECTED = 1989265;
         long result = 0;
         try {
@@ -29,26 +29,21 @@ public class Day02Test {
             System.out.println(e.getMessage());
         }
         assertEquals(EXPECTED, result);
-    }
 
-    @Test
-    @Order(2)   // Run after Puzzle Part A
-    public void Day02B() {
-        final long EXPECTED = 2089174012;
-        long result = 0;
+        final long PARTB_EXPECTED = 2089174012;
         try {
             result = day02Service.doPartB();
             ToClipboard.set(result);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        assertEquals(EXPECTED, result);
+        assertEquals(PARTB_EXPECTED, result);
     }
 
     @Test
     @Order(3)   // Run before Example Part B
     @Disabled
-    public void Day02AExample1() {
+    public void Day02Example1() {
         example1Service = new Day02Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
         final long EXPECTED = 0;
         long result = 0;
@@ -58,21 +53,13 @@ public class Day02Test {
             System.out.println(e.getMessage());
         }
         assertEquals(EXPECTED, result);
-    }
 
-    @Test
-    @Order(4)   // Run after Example Part A
-    public void Day02BExample1() {
-        // Instantiate the service if Part A was skipped
-        if (example1Service == null) example1Service = new Day02Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
-
-        final long EXPECTED = 900;
-        long result = 0;
+        final long PARTB_EXPECTED = 900;
         try {
             result = example1Service.doPartB();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        assertEquals(EXPECTED, result);
+        assertEquals(PARTB_EXPECTED, result);
     }
 }

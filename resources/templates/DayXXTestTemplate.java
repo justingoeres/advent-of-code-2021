@@ -10,7 +10,7 @@ public class Day${AOC_DAY}Test {
     // Puzzle
     private final String PUZZLE_INPUT = "data/day${AOC_DAY}/input.txt";
     private final boolean PUZZLE_DEBUG = false;
-    private final Day${AOC_DAY}Service day${AOC_DAY}Service = new Day${AOC_DAY}Service(PUZZLE_INPUT, PUZZLE_DEBUG);
+    private final Day${AOC_DAY}Service day${AOC_DAY}Service = null;
 
     // Examples
     private final String EXAMPLE1_INPUT = "data/day${AOC_DAY}/example1.txt";
@@ -20,6 +20,10 @@ public class Day${AOC_DAY}Test {
     @Test
     @Order(1)   // Run before Puzzle Part B
     public void Day${AOC_DAY}A() {
+        if (day${AOC_DAY}Service == null) {
+            day${AOC_DAY}Service = new day${AOC_DAY}Service(PUZZLE_INPUT, PUZZLE_DEBUG);
+        }
+
         final long EXPECTED = 0;
         long result = 0;
         try {
@@ -34,6 +38,10 @@ public class Day${AOC_DAY}Test {
     @Test
     @Order(2)   // Run after Puzzle Part A
     public void Day${AOC_DAY}B() {
+        if (day${AOC_DAY}Service == null) {
+            day${AOC_DAY}Service = new day${AOC_DAY}Service(PUZZLE_INPUT, PUZZLE_DEBUG);
+        }
+
         final long EXPECTED = 0;
         long result = 0;
         try {
