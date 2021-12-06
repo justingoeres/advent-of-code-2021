@@ -10,7 +10,7 @@ public class Day06Test {
     // Puzzle
     private final String PUZZLE_INPUT = "data/day06/input.txt";
     private final boolean PUZZLE_DEBUG = false;
-    private final Day06Service day06Service = null;
+    private Day06Service day06Service = null;
 
     // Examples
     private final String EXAMPLE1_INPUT = "data/day06/example1.txt";
@@ -21,10 +21,10 @@ public class Day06Test {
     @Order(1)   // Run before Puzzle Part B
     public void Day06A() {
         if (day06Service == null) {
-            day06Service = new day06Service(PUZZLE_INPUT, PUZZLE_DEBUG);
+            day06Service = new Day06Service(PUZZLE_INPUT, PUZZLE_DEBUG);
         }
 
-        final long EXPECTED = 0;
+        final long EXPECTED = 362346;
         long result = 0;
         try {
             result = day06Service.doPartA();
@@ -39,7 +39,7 @@ public class Day06Test {
     @Order(2)   // Run after Puzzle Part A
     public void Day06B() {
         if (day06Service == null) {
-            day06Service = new day06Service(PUZZLE_INPUT, PUZZLE_DEBUG);
+            day06Service = new Day06Service(PUZZLE_INPUT, PUZZLE_DEBUG);
         }
 
         final long EXPECTED = 0;
@@ -55,10 +55,9 @@ public class Day06Test {
 
     @Test
     @Order(3)   // Run before Example Part B
-    @Disabled
     public void Day06AExample1() {
         example1Service = new Day06Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
-        final long EXPECTED = 0;
+        final long EXPECTED = 5934;
         long result = 0;
         try {
             result = example1Service.doPartA();
