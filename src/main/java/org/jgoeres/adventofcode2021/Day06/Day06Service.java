@@ -15,6 +15,7 @@ public class Day06Service {
 
     private ArrayList<Integer> inputList = new ArrayList<>();
     private static final Integer TOTAL_DAYS = 80;
+    private static final Integer TOTAL_DAYS_PART_B = 256;
     private static final Integer GENERATION_LENGTH = 6;    // days to reproduce
 
     private FishTimerCounts fishTimersToCounts = new FishTimerCounts(GENERATION_LENGTH);
@@ -84,8 +85,13 @@ public class Day06Service {
     public long doPartB() {
         System.out.println("=== DAY 6B ===");
 
-        long result = 0;
-        /** Put problem implementation here **/
+        /** now do 256 days! **/
+        for (int day = 0; day < TOTAL_DAYS_PART_B; day++) {
+            doTimerTick();
+        }
+        // when we're done, count 'em up
+        long result = nextFishTimersToCounts.getMap().values().stream()
+                .collect(Collectors.summingLong(Long::longValue));
 
         System.out.println("Day 6B: Answer = " + result);
         return result;

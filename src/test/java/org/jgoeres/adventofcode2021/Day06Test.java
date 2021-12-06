@@ -20,9 +20,7 @@ public class Day06Test {
     @Test
     @Order(1)   // Run before Puzzle Part B
     public void Day06A() {
-        if (day06Service == null) {
-            day06Service = new Day06Service(PUZZLE_INPUT, PUZZLE_DEBUG);
-        }
+        day06Service = new Day06Service(PUZZLE_INPUT, PUZZLE_DEBUG);
 
         final long EXPECTED = 362346;
         long result = 0;
@@ -38,11 +36,10 @@ public class Day06Test {
     @Test
     @Order(2)   // Run after Puzzle Part A
     public void Day06B() {
-        if (day06Service == null) {
-            day06Service = new Day06Service(PUZZLE_INPUT, PUZZLE_DEBUG);
-        }
+        // Need to start fresh with original inputs, so just make a new one
+        day06Service = new Day06Service(PUZZLE_INPUT, PUZZLE_DEBUG);
 
-        final long EXPECTED = 0;
+        final long EXPECTED = 1639643057051L;
         long result = 0;
         try {
             result = day06Service.doPartB();
@@ -72,7 +69,9 @@ public class Day06Test {
     @Disabled
     public void Day06BExample1() {
         // Instantiate the service if Part A was skipped
-        if (example1Service == null) example1Service = new Day06Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
+        if (example1Service == null) {
+            example1Service = new Day06Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
+        }
 
         final long EXPECTED = 0;
         long result = 0;
