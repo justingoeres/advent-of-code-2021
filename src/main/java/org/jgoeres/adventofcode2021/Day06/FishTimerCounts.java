@@ -16,7 +16,7 @@ public class FishTimerCounts {
         // a PUT needs to check to see if the target timer value
         // already exists, and if so, add to it.
         if (timer == GENERATION_LENGTH && map.containsKey(timer)) {
-            // if the vent already exists, increment it
+            // if the timer already exists, increment it
             map.compute(timer, (key, value) ->
                     value + count);
         } else {

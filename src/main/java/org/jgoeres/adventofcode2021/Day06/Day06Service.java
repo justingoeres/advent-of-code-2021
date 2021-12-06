@@ -3,17 +3,15 @@ package org.jgoeres.adventofcode2021.Day06;
 import org.jgoeres.adventofcode.common.Utils.Pair;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.text.MessageFormat;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Day06Service {
-    public boolean DEBUG = false;
+    private final boolean DEBUG;
 
-    private ArrayList<Integer> inputList = new ArrayList<>();
     private static final Integer TOTAL_DAYS = 80;
     private static final Integer TOTAL_DAYS_PART_B = 256;
     private static final Integer GENERATION_LENGTH = 6;    // days to reproduce
@@ -25,11 +23,12 @@ public class Day06Service {
 
     public Day06Service(String pathToFile) {
         loadInputs(pathToFile);
+        this.DEBUG = false;
     }
 
     public Day06Service(String pathToFile, boolean debug) {
         loadInputs(pathToFile);
-        DEBUG = debug;
+        this.DEBUG = debug;
     }
 
     public long doPartA() {
@@ -41,9 +40,9 @@ public class Day06Service {
             doTimerTick();
         }
         // when we're done, count 'em up
-        long result = nextFishTimersToCounts.getMap().values().stream()
+        final long result = nextFishTimersToCounts.getMap().values().stream()
                 .collect(Collectors.summingLong(Long::longValue));
-        System.out.println("Day 6A: Answer = " + result);
+        System.out.println(MessageFormat.format("Day 6A: Answer = {0}", result));
         return result;
     }
 
@@ -77,7 +76,6 @@ public class Day06Service {
                 nextFishTimersToCounts.putTimerCount(timer - 1, count);
             }
         }
-        // place the result in the NEW timersToCounts map as we go
         // swap the Maps.
         timerMaps.swap();
     }
@@ -90,24 +88,22 @@ public class Day06Service {
             doTimerTick();
         }
         // when we're done, count 'em up
-        long result = nextFishTimersToCounts.getMap().values().stream()
+        final long result = nextFishTimersToCounts.getMap().values().stream()
                 .collect(Collectors.summingLong(Long::longValue));
 
-        System.out.println("Day 6B: Answer = " + result);
+        System.out.println(MessageFormat.format("Day 6B: Answer = {0}", result));
         return result;
     }
 
     // load inputs line-by-line and apply a regex to extract fields
     private void loadInputs(String pathToFile) {
-        inputList.clear();
         try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
             String line;
-            Integer nextInt = 0;
             // e.g. 3,4,3,1,2
             final Pattern p = Pattern.compile("(\\d+)");
             line = br.readLine();   // only one line in this input
             // process the line.
-            Matcher m = p.matcher(line);
+            final Matcher m = p.matcher(line);
             while (m.find()) { // while there are more Integers to match
                 // Parse each one
                 Integer timerStart = Integer.parseInt(m.group(1));
