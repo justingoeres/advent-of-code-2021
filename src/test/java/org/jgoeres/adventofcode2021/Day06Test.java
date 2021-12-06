@@ -1,33 +1,31 @@
-package org.jgoeres.adventofcode${AOC_YEAR};
+package org.jgoeres.adventofcode2021;
 
-import org.jgoeres.adventofcode${AOC_YEAR}.Day${AOC_DAY}.Day${AOC_DAY}Service;
+import org.jgoeres.adventofcode2021.Day06.Day06Service;
 import org.jgoeres.adventofcode.common.ToClipboard;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class Day${AOC_DAY}Test {
+public class Day06Test {
     // Puzzle
-    private final String PUZZLE_INPUT = "data/day${AOC_DAY}/input.txt";
+    private final String PUZZLE_INPUT = "data/day06/input.txt";
     private final boolean PUZZLE_DEBUG = false;
-    private Day${AOC_DAY}Service day${AOC_DAY}Service = null;
+    private Day06Service day06Service = null;
 
     // Examples
-    private final String EXAMPLE1_INPUT = "data/day${AOC_DAY}/example1.txt";
+    private final String EXAMPLE1_INPUT = "data/day06/example1.txt";
     private final boolean EXAMPLE_DEBUG = false;
-    private Day${AOC_DAY}Service example1Service = null;
+    private Day06Service example1Service = null;
 
     @Test
     @Order(1)   // Run before Puzzle Part B
-    public void Day${AOC_DAY}A() {
-        if (day${AOC_DAY}Service == null) {
-            day${AOC_DAY}Service = new Day${AOC_DAY}Service(PUZZLE_INPUT, PUZZLE_DEBUG);
-        }
+    public void Day06A() {
+        day06Service = new Day06Service(PUZZLE_INPUT, PUZZLE_DEBUG);
 
-        final long EXPECTED = 0;
+        final long EXPECTED = 362346;
         long result = 0;
         try {
-            result = day${AOC_DAY}Service.doPartA();
+            result = day06Service.doPartA();
             ToClipboard.set(result);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -37,15 +35,14 @@ public class Day${AOC_DAY}Test {
 
     @Test
     @Order(2)   // Run after Puzzle Part A
-    public void Day${AOC_DAY}B() {
-        if (day${AOC_DAY}Service == null) {
-            day${AOC_DAY}Service = new Day${AOC_DAY}Service(PUZZLE_INPUT, PUZZLE_DEBUG);
-        }
+    public void Day06B() {
+        // Need to start fresh with original inputs, so just make a new one
+        day06Service = new Day06Service(PUZZLE_INPUT, PUZZLE_DEBUG);
 
-        final long EXPECTED = 0;
+        final long EXPECTED = 1639643057051L;
         long result = 0;
         try {
-            result = day${AOC_DAY}Service.doPartB();
+            result = day06Service.doPartB();
             ToClipboard.set(result);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -55,10 +52,9 @@ public class Day${AOC_DAY}Test {
 
     @Test
     @Order(3)   // Run before Example Part B
-    @Disabled
-    public void Day${AOC_DAY}AExample1() {
-        example1Service = new Day${AOC_DAY}Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
-        final long EXPECTED = 0;
+    public void Day06AExample1() {
+        example1Service = new Day06Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
+        final long EXPECTED = 5934;
         long result = 0;
         try {
             result = example1Service.doPartA();
@@ -71,9 +67,11 @@ public class Day${AOC_DAY}Test {
     @Test
     @Order(4)   // Run after Example Part A
     @Disabled
-    public void Day${AOC_DAY}BExample1() {
+    public void Day06BExample1() {
         // Instantiate the service if Part A was skipped
-        if (example1Service == null) example1Service = new Day${AOC_DAY}Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
+        if (example1Service == null) {
+            example1Service = new Day06Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
+        }
 
         final long EXPECTED = 0;
         long result = 0;
