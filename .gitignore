@@ -154,3 +154,5 @@ target/
 .idea/aws.xml
 
 .idea/modules.xml
+
+.idea/runConfigurations.xml
