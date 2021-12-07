@@ -156,3 +156,9 @@ target/
 .idea/modules.xml
 
 .idea/runConfigurations.xml
+
+adventofcode-2021-jgoeres.iml
+
+.idea/compiler.xml
+
+.idea/checkstyle-idea.xml
