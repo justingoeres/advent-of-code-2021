@@ -2,8 +2,10 @@ package org.jgoeres.adventofcode2021.Day07;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -54,17 +56,43 @@ public class Day07Service {
 //        Integer targetLeft = (inputList.size() - 1) / 2;
 //        Integer target = (inputList.get(targetLeft) + inputList.get(targetLeft + 1)) / 2;
 
-        // The final position when accounting for fuel is the mean of all points?
-        Float target = (inputList.stream().reduce(0,Integer::sum)).floatValue() / inputList.size();
-        Integer intTarget = Math.round(target);
+        // Pick a candidate target point. Start with the mean of all points
+        // (will truncate to integer but that's OK)
+        Integer target = (inputList.stream().reduce(0, Integer::sum)) / inputList.size();
 
-        Integer totalFuel = 0;
-        for (Integer crab: inputList) {
-            totalFuel += calculateFuel(crab, intTarget);
+        while (true) {
+            // go until we find a solution
+            // Find the fuel requirements to get to THIS spot
+            Integer fuelForTarget = calculateAllFuel(inputList, target);
+            // Find the fuel requirements to get to the spot on either side of this spot
+            Integer fuelLeft = calculateAllFuel(inputList, target - 1);
+            Integer fuelRight = calculateAllFuel(inputList, target + 1);
+
+            System.out.print(MessageFormat
+                    .format("target = {0}\tFuel required:\t(left) {1}   {2}   {3} (right)\t",
+                            target, fuelLeft, fuelForTarget, fuelRight));
+            if (fuelLeft >= fuelForTarget && fuelForTarget <= fuelRight) {
+                // If this is a local minimum, we're done!
+                System.out.println("FOUND A MINIMUM!");
+                System.out.println("Day 7B: Answer = " + fuelForTarget);
+                return fuelForTarget;
+            } else if (fuelForTarget > fuelLeft) {
+                // otherwise, move toward the LOWER target next to us
+                System.out.println("Moving LEFT");
+                target--;
+            } else if (fuelForTarget > fuelRight) {
+                System.out.println("Moving RIGHT");
+                target++;
+            }
         }
+    }
 
-        System.out.println("Day 7B: Answer = " + totalFuel);
-        return totalFuel;
+    private Integer calculateAllFuel(List<Integer> crabs, final Integer target) {
+        Integer fuelRequired = 0;
+        for (Integer crab : crabs) {
+            fuelRequired += calculateFuel(crab, target);
+        }
+        return fuelRequired;
     }
 
     private Integer calculateFuel(final Integer current, final Integer target) {
