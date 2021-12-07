@@ -10,7 +10,7 @@ public class Day07Test {
     // Puzzle
     private final String PUZZLE_INPUT = "data/day07/input.txt";
     private final boolean PUZZLE_DEBUG = false;
-    private final Day07Service day07Service = null;
+    private Day07Service day07Service = null;
 
     // Examples
     private final String EXAMPLE1_INPUT = "data/day07/example1.txt";
@@ -21,10 +21,10 @@ public class Day07Test {
     @Order(1)   // Run before Puzzle Part B
     public void Day07A() {
         if (day07Service == null) {
-            day07Service = new day07Service(PUZZLE_INPUT, PUZZLE_DEBUG);
+            day07Service = new Day07Service(PUZZLE_INPUT, PUZZLE_DEBUG);
         }
 
-        final long EXPECTED = 0;
+        final long EXPECTED = 356922;
         long result = 0;
         try {
             result = day07Service.doPartA();
@@ -39,8 +39,9 @@ public class Day07Test {
     @Order(2)   // Run after Puzzle Part A
     public void Day07B() {
         if (day07Service == null) {
-            day07Service = new day07Service(PUZZLE_INPUT, PUZZLE_DEBUG);
+            day07Service = new Day07Service(PUZZLE_INPUT, PUZZLE_DEBUG);
         }
+        // 100347068    too high
 
         final long EXPECTED = 0;
         long result = 0;
@@ -55,10 +56,9 @@ public class Day07Test {
 
     @Test
     @Order(3)   // Run before Example Part B
-    @Disabled
     public void Day07AExample1() {
         example1Service = new Day07Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
-        final long EXPECTED = 0;
+        final long EXPECTED = 37;
         long result = 0;
         try {
             result = example1Service.doPartA();
@@ -75,7 +75,7 @@ public class Day07Test {
         // Instantiate the service if Part A was skipped
         if (example1Service == null) example1Service = new Day07Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
 
-        final long EXPECTED = 0;
+        final long EXPECTED = 168;
         long result = 0;
         try {
             result = example1Service.doPartB();
