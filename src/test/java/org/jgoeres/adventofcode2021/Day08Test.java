@@ -55,7 +55,6 @@ public class Day08Test {
 
     @Test
     @Order(3)   // Run before Example Part B
-    @Disabled
     public void Day08AExample1() {
         example1Service = new Day08Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
         final long EXPECTED = 0;

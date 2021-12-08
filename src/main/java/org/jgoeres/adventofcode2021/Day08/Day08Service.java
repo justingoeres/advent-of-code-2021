@@ -1,14 +1,16 @@
 package org.jgoeres.adventofcode2021.Day08;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day08Service {
     public boolean DEBUG = false;
 
-    private ArrayList<Integer> inputList = new ArrayList<>();
+    private ArrayList<Display> inputList = new ArrayList<>();
 
     public Day08Service(String pathToFile) {
         loadInputs(pathToFile);
@@ -45,16 +47,24 @@ public class Day08Service {
         try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
             String line;
             Integer nextInt = 0;
-            /** Replace this regex **/
-            Pattern p = Pattern.compile("([FB]{7})([LR]{3})");
+            /** Each entry consists of ten unique signal patterns,
+             * a | delimiter, and finally the four digit output value **/
+            Pattern signalPattern = Pattern.compile("([a-g]+)\\s?");
             while ((line = br.readLine()) != null) {
-                // process the line.
-                Matcher m = p.matcher(line);
-                if (m.find()) { // If our regex matched this line
+                String[] splitLine = line.split("\\|");
+                // process the first section (the patterns)
+                Matcher m = signalPattern.matcher(splitLine[0]);
+                List<String> patterns = new ArrayList<>();
+                while (m.find()) { // If our regex matched this line
                     // Parse it
-                    String field1 = m.group(1);
-                    String field2 = m.group(2);
+                    patterns.add(m.group(1));
                 }
+                m = signalPattern.matcher(splitLine[1]);
+                List<String> digits = new ArrayList<>();
+                while (m.find()) {
+                    digits.add(m.group(1));
+                }
+                inputList.add(new Display(patterns, digits));
             }
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
