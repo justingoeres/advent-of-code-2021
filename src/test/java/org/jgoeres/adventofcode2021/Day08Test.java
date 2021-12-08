@@ -24,7 +24,7 @@ public class Day08Test {
             day08Service = new Day08Service(PUZZLE_INPUT, PUZZLE_DEBUG);
         }
 
-        final long EXPECTED = 0;
+        final long EXPECTED = 554;
         long result = 0;
         try {
             result = day08Service.doPartA();
@@ -57,7 +57,7 @@ public class Day08Test {
     @Order(3)   // Run before Example Part B
     public void Day08AExample1() {
         example1Service = new Day08Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
-        final long EXPECTED = 0;
+        final long EXPECTED = 26;
         long result = 0;
         try {
             result = example1Service.doPartA();

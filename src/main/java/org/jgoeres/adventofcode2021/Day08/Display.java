@@ -10,4 +10,12 @@ public class Display {
         this.patterns = patterns;
         this.digits = digits;
     }
+
+    public List<String> getPatterns() {
+        return patterns;
+    }
+
+    public List<String> getDigits() {
+        return digits;
+    }
 }

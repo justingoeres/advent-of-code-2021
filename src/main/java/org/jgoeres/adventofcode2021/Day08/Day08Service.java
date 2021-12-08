@@ -25,10 +25,30 @@ public class Day08Service {
         System.out.println("=== DAY 8A ===");
 
         long result = 0;
-        /** Put problem implementation here **/
+        /** Because the digits 1, 4, 7, and 8 each use a unique number of segments,
+         * you should be able to tell which combinations of signals correspond to
+         * those digits. Counting only digits in the output values
+         * (the part after | on each line),
+         * in the output values, how many times do digits 1, 4, 7, or 8 appear?
+         **/
 
-        System.out.println("Day 8A: Answer = " + result);
-        return result;
+        // "1" is 2 segments
+        // "4" is 4 segments
+        // "7" is 3 segments
+        // "8" is 7 segments
+
+        // Count the lengths of the items in the "digits" list
+        int count = 0;
+        for (Display display : inputList) {
+            for (String digit : display.getDigits()) {
+                int length = digit.length();
+                if (length == 2 || length == 4 || length == 3 || length == 7) {
+                    count++;
+                }
+            }
+        }
+        System.out.println("Day 8A: Answer = " + count);
+        return count;
     }
 
     public long doPartB() {
