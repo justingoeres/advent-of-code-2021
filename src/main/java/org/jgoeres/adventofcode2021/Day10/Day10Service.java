@@ -2,18 +2,13 @@ package org.jgoeres.adventofcode2021.Day10;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Stack;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class Day10Service {
     public boolean DEBUG = false;
 
-    private ArrayList<String> inputList = new ArrayList<>();
+    private final ArrayList<String> inputList = new ArrayList<>();
+    private final List<Long> autocompleteScores = new ArrayList<>();
 
     public Day10Service(String pathToFile) {
         loadInputs(pathToFile);
@@ -27,7 +22,6 @@ public class Day10Service {
     public long doPartA() {
         System.out.println("=== DAY 10A ===");
 
-        long result = 0;
         /**
          * Take the first illegal character on the line and look it up in the following table:
          *
@@ -40,8 +34,8 @@ public class Day10Service {
          * What is the total syntax error score for those errors?
          * **/
 
-        Stack<Opener> navigationStack = new Stack<>();
-        List<Closer> mismatchedClosers = new ArrayList<>();
+        final Deque<Opener> navigationStack = new ArrayDeque<>();
+        final List<Closer> mismatchedClosers = new ArrayList<>();
         for (String line : inputList) {
             // Process each line
 //            System.out.println("Processing line:\t" + line);
@@ -57,19 +51,37 @@ public class Day10Service {
                     if (!isMatched(character, navigationStack)) {
 //                        System.out.println("Mismatch detected!");
                         mismatchedClosers.add(Closer.getCloserByChar(character).get());
+                        navigationStack.clear();    // clear the stack for the next line
                         break;
                     }
                 }
             }
+            // If we get here, we have an *incomplete* (but valid) line,
+            // so (for part B) we can complete it by just unwinding the stack
+            // let's figure out how to complete it
+//            System.out.println("Line is incomplete...");
+            final StringBuilder closingWith = new StringBuilder();
+            Long autocompleteScore = navigationStack.stream().map(opener -> opener.getMatch())
+                    .peek(closer -> closingWith.append(closer.getCharacter()))
+                    .reduce(0L,
+                            (subtotal, element) -> 5 * subtotal + element.getAutocompleteScore(),
+                            Long::sum);
+//            System.out.println("Closing with:\t" + closingWith + "\tScore:\t" + autocompleteScore + "\n");
+            if (autocompleteScore > 0) {
+                autocompleteScores.add(autocompleteScore);
+            }
+            navigationStack.clear(); // clear the stack for the next line
+
         }
-        // Now add up the scores
-        result = mismatchedClosers.stream()
-                .map(closer -> closer.getScore()).reduce(Integer::sum).get();
+        // Now add up the scores for Part A
+        final Long result = mismatchedClosers.stream()
+                .map(closer -> closer.getScore()).reduce(Long::sum).get();
         System.out.println("Day 10A: Answer = " + result);
+
         return result;
     }
 
-    private Boolean isMatched(Character character, Stack<Opener> stack) {
+    private Boolean isMatched(Character character, Deque<Opener> stack) {
         // We found a closer! Pop the stack and see if it matches
         Optional<Closer> closer = Closer.getCloserByChar(character);
         Opener fromStack = stack.pop();
@@ -81,14 +93,19 @@ public class Day10Service {
     public long doPartB() {
         System.out.println("=== DAY 10B ===");
 
-        long result = 0;
-        /** Put problem implementation here **/
+        /**
+         * Find the completion string for each incomplete line,
+         * score the completion strings, and sort the scores. What is the middle score?
+         **/
+        // And for Part B, get the median of the autocomplete scores
+        Collections.sort(autocompleteScores);
+        Long result = autocompleteScores
+                .get(autocompleteScores.size() / 2); // gets the median of an odd-length array
 
         System.out.println("Day 10B: Answer = " + result);
         return result;
     }
 
-    // load inputs line-by-line and apply a regex to extract fields
     private void loadInputs(String pathToFile) {
         inputList.clear();
         try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {

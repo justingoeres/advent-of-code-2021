@@ -4,25 +4,31 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public enum Closer {
-    CLOSE_PAREN(')', 3),
-    CLOSE_SQUARE(']', 57),
-    CLOSE_CURLY('}', 1197),
-    CLOSE_ANGLE('>', 25137);
+    CLOSE_PAREN(')', 3L, 1L),
+    CLOSE_SQUARE(']', 57L, 2L),
+    CLOSE_CURLY('}', 1197L, 3L),
+    CLOSE_ANGLE('>', 25137L, 4L);
 
     private final Character character;
-    private final Integer score;
+    private final Long score;
+    private final Long autocompleteScore;
 
-    Closer(Character character, Integer score) {
+    Closer(Character character, Long score, Long autocompleteScore) {
         this.character = character;
         this.score = score;
+        this.autocompleteScore = autocompleteScore;
     }
 
     public Character getCharacter() {
         return character;
     }
 
-    public Integer getScore() {
+    public Long getScore() {
         return score;
+    }
+
+    public Long getAutocompleteScore() {
+        return autocompleteScore;
     }
 
     // Reverse lookup methods
