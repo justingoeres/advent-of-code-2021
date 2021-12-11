@@ -17,9 +17,6 @@ public class Day11Test {
     private final boolean EXAMPLE_DEBUG = false;
     private Day11Service example1Service = null;
 
-    private final String EXAMPLE2_INPUT = "data/day11/example2.txt";
-    private Day11Service example2Service = null;
-
     @Test
     @Order(1)   // Run before Puzzle Part B
     public void Day11() {
@@ -47,28 +44,8 @@ public class Day11Test {
         assertEquals(EXPECTED_PARTB, result);
     }
 
-
-    @Test
-    @Order(2)   // Run after Puzzle Part A
-    public void Day11B() {
-        if (day11Service == null) {
-            day11Service = new Day11Service(PUZZLE_INPUT, PUZZLE_DEBUG);
-        }
-
-        final long EXPECTED = 0;
-        long result = 0;
-        try {
-            result = day11Service.doPartB();
-            ToClipboard.set(result);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        assertEquals(EXPECTED, result);
-    }
-
     @Test
     @Order(3)   // Run before Example Part B
-    @Disabled
     public void Day11Example1() {
         example1Service = new Day11Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
         final long EXPECTED = 1656;
@@ -88,39 +65,5 @@ public class Day11Test {
             System.out.println(e.getMessage());
         }
         assertEquals(EXPECTED_PARTB, result);
-    }
-
-    @Test
-    @Order(4)   // Run after Example Part A
-    @Disabled
-    public void Day11BExample1() {
-        // Instantiate the service if Part A was skipped
-        if (example1Service == null) {
-            example1Service = new Day11Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
-        }
-
-        final long EXPECTED = 0;
-        long result = 0;
-        try {
-            result = example1Service.doPartB();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        assertEquals(EXPECTED, result);
-    }
-
-    @Test
-    @Order(5)   // Run before Example Part B
-    @Disabled
-    public void Day11AExample2() {
-        example2Service = new Day11Service(EXAMPLE2_INPUT, EXAMPLE_DEBUG);
-        final long EXPECTED = 0;
-        long result = 0;
-        try {
-            result = example2Service.doPartA();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        assertEquals(EXPECTED, result);
     }
 }

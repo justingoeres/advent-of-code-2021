@@ -28,7 +28,6 @@ public class Day11Service {
     public long doPartA() {
         System.out.println("=== DAY 11A ===");
 
-        long result = 0;
         /** During a single step, the following occurs:
 
          - First, the energy level of each octopus increases by 1.
@@ -56,6 +55,27 @@ public class Day11Service {
         return count;
     }
 
+    public long doPartB() {
+        System.out.println("=== DAY 11B ===");
+
+        /**
+         * What is the first step during which all octopuses flash?
+         **/
+
+        // Assume we've already done part A and keep going
+        long step = TOTAL_STEPS; // starting from where A left off
+        long count = 0;
+        do {
+            count = doTimerTick();
+            step++;
+//            System.out.println("== After Step " + step + ":");
+//            printOctopods();
+//            System.out.println(); // blank line to separate
+        } while (count != 100);
+        System.out.println("Day 11B: Answer = " + step);
+        return step;
+    }
+
     private long doTimerTick() {
         // Bump all octopus energy by 1
         octopodEnergy
@@ -78,9 +98,7 @@ public class Day11Service {
                 .map(entry -> entry.getKey()).collect(Collectors.toList());
         final long count = flashes.size();
         // Then set them all to zero energy
-        flashes.forEach(octopus -> {
-            octopodEnergy.compute(octopus, (key, value) -> 0);
-        });
+        flashes.forEach(octopus -> octopodEnergy.compute(octopus, (key, value) -> 0));
 //        System.out.println("Flashes:\t" + count);
         return count;
     }
@@ -91,6 +109,7 @@ public class Day11Service {
         neighbors.forEach(octopus -> octopodEnergy.compute(octopus, (key, value) -> value + 1));
         // Then, for any that are at EXACTLY an energy of 10, propagate THEIR flash
 
+        // Why doesn't this stream code work?!? Isn't it equivalent to the for loop below??
 //        neighbors.stream().filter(p -> octopodEnergy.get(p).equals(10))
 //                .forEach(neighbor -> propagateFlash(neighbor, octopodEnergy));
 
@@ -99,7 +118,6 @@ public class Day11Service {
         for (XYPoint nextFlash : nextFlashes) {
             propagateFlash(nextFlash, octopodEnergy);
         }
-
     }
 
     private Set<XYPoint> getNeighbors(XYPoint xy, HashMap<XYPoint, Integer> octopodEnergy) {
@@ -125,28 +143,6 @@ public class Day11Service {
             System.out.println(outputLine);
         }
         System.out.println(); // blank line after
-    }
-
-
-    public long doPartB() {
-        System.out.println("=== DAY 11B ===");
-
-        /**
-         * What is the first step during which all octopuses flash?
-         **/
-
-        // Assume we've already done part A and keep going
-        long step = TOTAL_STEPS; // starting from where A left off
-        long count = 0;
-        do {
-            count = doTimerTick();
-            step++;
-//            System.out.println("== After Step " + step + ":");
-//            printOctopods();
-//            System.out.println(); // blank line to separate
-        } while (count != 100);
-        System.out.println("Day 11B: Answer = " + step);
-        return step;
     }
 
     // load inputs line-by-line and apply a regex to extract fields
