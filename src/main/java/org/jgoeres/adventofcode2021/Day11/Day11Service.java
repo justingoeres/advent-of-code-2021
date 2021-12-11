@@ -131,11 +131,22 @@ public class Day11Service {
     public long doPartB() {
         System.out.println("=== DAY 11B ===");
 
-        long result = 0;
-        /** Put problem implementation here **/
+        /**
+         * What is the first step during which all octopuses flash?
+         **/
 
-        System.out.println("Day 11B: Answer = " + result);
-        return result;
+        // Assume we've already done part A and keep going
+        long step = TOTAL_STEPS; // starting from where A left off
+        long count = 0;
+        do {
+            count = doTimerTick();
+            step++;
+//            System.out.println("== After Step " + step + ":");
+//            printOctopods();
+//            System.out.println(); // blank line to separate
+        } while (count != 100);
+        System.out.println("Day 11B: Answer = " + step);
+        return step;
     }
 
     // load inputs line-by-line and apply a regex to extract fields

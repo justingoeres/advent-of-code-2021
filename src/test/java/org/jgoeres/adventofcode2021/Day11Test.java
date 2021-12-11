@@ -22,7 +22,7 @@ public class Day11Test {
 
     @Test
     @Order(1)   // Run before Puzzle Part B
-    public void Day11A() {
+    public void Day11() {
         if (day11Service == null) {
             day11Service = new Day11Service(PUZZLE_INPUT, PUZZLE_DEBUG);
         }
@@ -36,7 +36,17 @@ public class Day11Test {
             System.out.println(e.getMessage());
         }
         assertEquals(EXPECTED, result);
+
+        final long EXPECTED_PARTB = 327;
+        try {
+            result = day11Service.doPartB();
+            ToClipboard.set(result);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        assertEquals(EXPECTED_PARTB, result);
     }
+
 
     @Test
     @Order(2)   // Run after Puzzle Part A
@@ -59,7 +69,7 @@ public class Day11Test {
     @Test
     @Order(3)   // Run before Example Part B
     @Disabled
-    public void Day11AExample1() {
+    public void Day11Example1() {
         example1Service = new Day11Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
         final long EXPECTED = 1656;
         long result = 0;
@@ -69,6 +79,15 @@ public class Day11Test {
             System.out.println(e.getMessage());
         }
         assertEquals(EXPECTED, result);
+
+        final long EXPECTED_PARTB = 195;
+        try {
+            result = example1Service.doPartB();
+            ToClipboard.set(result);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        assertEquals(EXPECTED_PARTB, result);
     }
 
     @Test
@@ -76,7 +95,9 @@ public class Day11Test {
     @Disabled
     public void Day11BExample1() {
         // Instantiate the service if Part A was skipped
-        if (example1Service == null) example1Service = new Day11Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
+        if (example1Service == null) {
+            example1Service = new Day11Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
+        }
 
         final long EXPECTED = 0;
         long result = 0;
