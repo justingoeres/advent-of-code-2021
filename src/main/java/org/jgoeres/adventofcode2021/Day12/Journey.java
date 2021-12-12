@@ -80,34 +80,6 @@ public class Journey {
         }
     }
 
-    public Boolean hasVisited(Cave cave) {
-        return visited.contains(cave);
-    }
-
-    public Set<Cave> canVisit() {
-        // This journey "can visit" any of its neighbors
-        final Set<Cave> canVisit = current.getAllNeighbors();
-        // EXCEPT small caves it has already been to
-        canVisit.removeAll(visited);
-        return canVisit;
-    }
-
-    public Boolean isFinished() {
-        // Are we at the end?
-        return (current.getName() == "end");
-    }
-
-    public Journey spawn(Cave nextVisit) {
-        // Create a *new* journey just like this one, but move it to the 'nextVisit' cave
-        Journey spawnedJourney = new Journey(current, visited);
-        spawnedJourney.goTo(nextVisit);
-        return spawnedJourney;
-    }
-
-    public Cave getCurrent() {
-        return current;
-    }
-
     public Integer getPathsFound() {
         return pathsFound;
     }
@@ -116,8 +88,5 @@ public class Journey {
     public String toString() {
         return visitedStack.stream().map(cave -> cave.getName()).collect(Collectors.joining(",")) +
                 "," + current.getName();
-//        return visited.stream().map(cave -> cave.getName())
-//                .collect(Collectors.joining(", "))
-//                + ", " + current.getName();
     }
 }
