@@ -44,8 +44,7 @@ public class Day12Test {
         if (day12Service == null) {
             day12Service = new Day12Service(PUZZLE_INPUT, PUZZLE_DEBUG);
         }
-
-        final long EXPECTED = 0;
+        final long EXPECTED = 91292;
         long result = 0;
         try {
             result = day12Service.doPartB();
@@ -58,10 +57,9 @@ public class Day12Test {
 
     @Test
     @Order(3)   // Run before Example Part B
-    @Disabled
     public void Day12AExample1() {
         example1Service = new Day12Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
-        final long EXPECTED = 0;
+        final long EXPECTED = 10;
         long result = 0;
         try {
             result = example1Service.doPartA();
@@ -73,12 +71,13 @@ public class Day12Test {
 
     @Test
     @Order(4)   // Run after Example Part A
-    @Disabled
     public void Day12BExample1() {
         // Instantiate the service if Part A was skipped
-        if (example1Service == null) example1Service = new Day12Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
+        if (example1Service == null) {
+            example1Service = new Day12Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
+        }
 
-        final long EXPECTED = 0;
+        final long EXPECTED = 36;
         long result = 0;
         try {
             result = example1Service.doPartB();
@@ -90,13 +89,27 @@ public class Day12Test {
 
     @Test
     @Order(5)   // Run before Example Part B
-    @Disabled
     public void Day12AExample2() {
         example2Service = new Day12Service(EXAMPLE2_INPUT, EXAMPLE_DEBUG);
         final long EXPECTED = 19;
         long result = 0;
         try {
             result = example2Service.doPartA();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        assertEquals(EXPECTED, result);
+    }
+
+
+    @Test
+    @Order(5)   // Run before Example Part B
+    public void Day12BExample2() {
+        example2Service = new Day12Service(EXAMPLE2_INPUT, EXAMPLE_DEBUG);
+        final long EXPECTED = 103;
+        long result = 0;
+        try {
+            result = example2Service.doPartB();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

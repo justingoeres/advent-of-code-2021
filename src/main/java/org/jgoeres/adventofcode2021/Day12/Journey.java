@@ -8,6 +8,7 @@ public class Journey {
     private Cave current;
     private final List<Cave> visited;
     private final Stack<Cave> visitedStack;
+    private Cave visitedTwice;
 
     private Integer pathsFound = 0;
 
@@ -18,15 +19,7 @@ public class Journey {
         this.allCaves = allCaves;
     }
 
-    public Journey(Cave current, List<Cave> visited) {
-        this.current = current;
-        this.visited = new ArrayList<>();
-        visited.addAll(visited);    // Add items, don't just point to the same Set
-        visitedStack = new Stack<>();   // probably delete this
-        this.allCaves = new HashMap<>();
-    }
-
-    public void findTheEnd() {
+    public void findTheEndPartA() {
         // To find the end, start from the cave we're at and recursively search
         // all possible steps until we hit "end"
         // At each step, the "visitable" list is any of the current cave's
@@ -54,10 +47,60 @@ public class Journey {
                         .collect(Collectors.toList());
         for (Cave visitable : visitableCaves) {
             this.goTo(visitable);
-            this.findTheEnd();
+            this.findTheEndPartA();
         }
         // When we get here, it's because we're at a dead end but NOT at the "end"
         // So just backtrack, making sure to remove things from the stack as we go
+        if (!visitedStack.isEmpty()) {
+            this.current = visitedStack.pop();
+        }
+        return;
+    }
+
+    public void findTheEndPartB() {
+        // To find the end, start from the cave we're at and recursively search
+        // all possible steps until we hit "end"
+        // At each step, the "visitable" list is any of the current cave's
+        // neighbors, EXCEPT for small caves we've already been to.
+
+        // Are we at the end?
+        if (current.getName().equals("end")) {
+            // print it!
+//            System.out.println(this);
+            // count it!
+            pathsFound++;
+            // go back!
+            this.current = visitedStack.pop();
+            return;   // how to handle the count?
+        }
+
+        // What are all the caves we can reach from here?
+        List<Cave> visitableCaves = new ArrayList<>();
+        // Start with all the neighbors
+        visitableCaves.addAll(current.getAllNeighbors());
+
+        // Can never go back to start
+        visitableCaves.remove(allCaves.get("start"));
+
+        // Part B: If we've been to ANY small cave twice,
+        if (visitedTwice != null) {
+            // Remove ALL the small ones we've already been to
+            visitableCaves =
+                    visitableCaves.stream()
+                            .filter(cave -> (!cave.isSmall() || !visitedStack.contains(cave)))
+                            .collect(Collectors.toList());
+        }
+
+        for (Cave visitable : visitableCaves) {
+            this.goTo(visitable);
+            this.findTheEndPartB();
+        }
+        // When we get here, it's because we're at a dead end but NOT at the "end"
+        // So just backtrack, making sure to remove things from the stack as we go
+        // Part B: If the cave we're leaving is one we've visited twice, un-record that.
+        if (visitedTwice == current) {
+            visitedTwice = null;
+        }
         if (!visitedStack.isEmpty()) {
             this.current = visitedStack.pop();
         }
@@ -71,6 +114,11 @@ public class Journey {
         this.visitedStack.push(current);
         // Then move to the new cave
         this.current = cave;
+        // If the current cave is small AND is also already
+        // on the visitedStack, this is our second visit.
+        if (current.isSmall() && visitedStack.contains(current)) {
+            this.visitedTwice = current;
+        }
     }
 
     private void addVisited(Cave cave) {
