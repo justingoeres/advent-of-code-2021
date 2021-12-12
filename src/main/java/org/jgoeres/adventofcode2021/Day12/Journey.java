@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 public class Journey {
     private final Map<String, Cave> allCaves;
     private Cave current;
-    private final List<Cave> visited;
     private final Stack<Cave> visitedStack;
     private Cave visitedTwice;
 
@@ -14,7 +13,6 @@ public class Journey {
 
     public Journey(Cave current, Map<String, Cave> allCaves) {
         this.current = current;
-        this.visited = new ArrayList<>();
         this.visitedStack = new Stack<>();
         this.allCaves = allCaves;
     }
@@ -28,7 +26,7 @@ public class Journey {
         // Are we at the end?
         if (current.getName().equals("end")) {
             // print it!
-            System.out.println(this);
+//            System.out.println(this);
             // count it!
             pathsFound++;
             // go back!
@@ -108,8 +106,6 @@ public class Journey {
     }
 
     public void goTo(Cave cave) {
-        // Add the current cave to places we've "visited"
-        this.addVisited(current);
         // Add the current cave to the "Visited" stack
         this.visitedStack.push(current);
         // Then move to the new cave
@@ -118,13 +114,6 @@ public class Journey {
         // on the visitedStack, this is our second visit.
         if (current.isSmall() && visitedStack.contains(current)) {
             this.visitedTwice = current;
-        }
-    }
-
-    private void addVisited(Cave cave) {
-        // Only add 'small' caves to the visited list, since we can visit large ones over and over
-        if (cave.isSmall()) {
-            visited.add(cave);
         }
     }
 
