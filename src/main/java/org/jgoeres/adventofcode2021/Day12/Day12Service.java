@@ -1,14 +1,18 @@
 package org.jgoeres.adventofcode2021.Day12;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day12Service {
     public boolean DEBUG = false;
 
-    private ArrayList<Integer> inputList = new ArrayList<>();
+    private final Map<String, Cave> caves = new HashMap<>();
 
     public Day12Service(String pathToFile) {
         loadInputs(pathToFile);
@@ -23,7 +27,11 @@ public class Day12Service {
         System.out.println("=== DAY 12A ===");
 
         long result = 0;
-        /** Put problem implementation here **/
+        /**
+         * How many paths through this cave system
+         * are there that visit small caves at most once? **/
+
+
 
         System.out.println("Day 12A: Answer = " + result);
         return result;
@@ -41,19 +49,38 @@ public class Day12Service {
 
     // load inputs line-by-line and apply a regex to extract fields
     private void loadInputs(String pathToFile) {
-        inputList.clear();
+        caves.clear();
         try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
             String line;
             Integer nextInt = 0;
-            /** Replace this regex **/
-            Pattern p = Pattern.compile("([FB]{7})([LR]{3})");
+            /**
+             * e.g.
+             * dc-end
+             * HN-start
+             * start-kj
+             * dc-start
+             * dc-HN
+             * **/
+            final Pattern p = Pattern.compile("([A-Za-z]+)-([A-Za-z]+)");
             while ((line = br.readLine()) != null) {
                 // process the line.
-                Matcher m = p.matcher(line);
+                final Matcher m = p.matcher(line);
                 if (m.find()) { // If our regex matched this line
-                    // Parse it
-                    String field1 = m.group(1);
-                    String field2 = m.group(2);
+                    // Create/update the two caves
+                    // Set them as neighbors of each other
+                    final String cave1Name = m.group(1);
+                    final String cave2Name = m.group(2);
+
+                    final Cave cave1 = caves.getOrDefault(cave1Name, new Cave(cave1Name));
+                    System.out.println(cave1);
+                    final Cave cave2 = caves.getOrDefault(cave2Name, new Cave(cave2Name));
+                    System.out.println(cave1);
+
+                    cave1.addBigOrSmallNeighbor(cave2);
+                    cave2.addBigOrSmallNeighbor(cave1);
+
+                    caves.put(cave1Name, cave1);
+                    caves.put(cave2Name, cave2);
                 }
             }
         } catch (Exception e) {
