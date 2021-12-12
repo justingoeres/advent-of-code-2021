@@ -17,6 +17,9 @@ public class Day12Test {
     private final boolean EXAMPLE_DEBUG = false;
     private Day12Service example1Service = null;
 
+    private final String EXAMPLE2_INPUT = "data/day12/example2.txt";
+    private Day12Service example2Service = null;
+
     @Test
     @Order(1)   // Run before Puzzle Part B
     public void Day12A() {
@@ -24,7 +27,7 @@ public class Day12Test {
             day12Service = new Day12Service(PUZZLE_INPUT, PUZZLE_DEBUG);
         }
 
-        final long EXPECTED = 0;
+        final long EXPECTED = 3713;
         long result = 0;
         try {
             result = day12Service.doPartA();
@@ -79,6 +82,21 @@ public class Day12Test {
         long result = 0;
         try {
             result = example1Service.doPartB();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        assertEquals(EXPECTED, result);
+    }
+
+    @Test
+    @Order(5)   // Run before Example Part B
+    @Disabled
+    public void Day12AExample2() {
+        example2Service = new Day12Service(EXAMPLE2_INPUT, EXAMPLE_DEBUG);
+        final long EXPECTED = 19;
+        long result = 0;
+        try {
+            result = example2Service.doPartA();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

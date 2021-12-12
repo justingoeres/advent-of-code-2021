@@ -2,10 +2,8 @@ package org.jgoeres.adventofcode2021.Day12;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,10 +27,16 @@ public class Day12Service {
         long result = 0;
         /**
          * How many paths through this cave system
-         * are there that visit small caves at most once? **/
+         * are there that visit small caves at most once?
+         **/
 
+        // Start at the beginning
+        Journey firstJourney = new Journey(caves.get("start"), caves);
 
+        // For each cave we can reach from here, spawn a journey to go there
+        firstJourney.findTheEnd();
 
+        result = firstJourney.getPathsFound();
         System.out.println("Day 12A: Answer = " + result);
         return result;
     }
@@ -72,9 +76,9 @@ public class Day12Service {
                     final String cave2Name = m.group(2);
 
                     final Cave cave1 = caves.getOrDefault(cave1Name, new Cave(cave1Name));
-                    System.out.println(cave1);
+//                    System.out.println(cave1);
                     final Cave cave2 = caves.getOrDefault(cave2Name, new Cave(cave2Name));
-                    System.out.println(cave1);
+//                    System.out.println(cave1);
 
                     cave1.addBigOrSmallNeighbor(cave2);
                     cave2.addBigOrSmallNeighbor(cave1);
