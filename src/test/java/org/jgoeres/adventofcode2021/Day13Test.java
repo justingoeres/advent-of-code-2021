@@ -42,15 +42,12 @@ public class Day13Test {
             day13Service = new Day13Service(PUZZLE_INPUT, PUZZLE_DEBUG);
         }
 
-        final long EXPECTED = 0;
-        long result = 0;
         try {
-            result = day13Service.doPartB();
-            ToClipboard.set(result);
+            day13Service.doPartB();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        assertEquals(EXPECTED, result);
+        // There is no test for 13B, it just has to spell "HECRZKPR"
     }
 
     @Test
@@ -73,12 +70,14 @@ public class Day13Test {
     @Disabled
     public void Day13BExample1() {
         // Instantiate the service if Part A was skipped
-        if (example1Service == null) example1Service = new Day13Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
+        if (example1Service == null) {
+            example1Service = new Day13Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
+        }
 
         final long EXPECTED = 0;
         long result = 0;
         try {
-            result = example1Service.doPartB();
+            example1Service.doPartB();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
