@@ -24,7 +24,7 @@ public class Day13Test {
             day13Service = new Day13Service(PUZZLE_INPUT, PUZZLE_DEBUG);
         }
 
-        final long EXPECTED = 0;
+        final long EXPECTED = 759;
         long result = 0;
         try {
             result = day13Service.doPartA();
