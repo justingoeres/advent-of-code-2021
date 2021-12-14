@@ -2,7 +2,6 @@ package org.jgoeres.adventofcode2021.Day14;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.text.MessageFormat;
 import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -13,7 +12,7 @@ public class Day14Service {
     public boolean DEBUG = false;
 
     private String inputLine;
-    private final LinkedList<String> inputList = new LinkedList<>();
+    private final LinkedList<String> chain = new LinkedList<>();
     private final Map<String, Character> insertions = new HashMap<>();
 
     Map<Character, Long> letterCounts;
@@ -33,9 +32,6 @@ public class Day14Service {
         System.out.println("=== DAY 14A ===");
         final Integer PARTA_STEPS = 10;
 
-        // Clone the template, since we reuse it for the other part
-        final LinkedList<String> chain = (LinkedList) inputList.clone();
-
         final long result = doExpansionSteps(chain, PARTA_STEPS);
         System.out.println("Day 14A: Answer = " + result);
         return result;
@@ -44,9 +40,6 @@ public class Day14Service {
     public long doPartB() {
         System.out.println("=== DAY 14B ===");
         final Integer PARTB_STEPS = 40;
-
-        // Clone the template, since we reuse it for the other part
-        final LinkedList<String> chain = (LinkedList) inputList.clone();
 
         final long result = doExpansionSteps(chain, PARTB_STEPS);
 
@@ -80,7 +73,6 @@ public class Day14Service {
             final ListIterator<String> chainIter = chain.listIterator();
             doInsertions(chainIter);
             System.out.println("Step: " + (step + 1));
-//            printStepResult(chain, step);
         }
 
         /**
@@ -102,23 +94,23 @@ public class Day14Service {
         // Iterate over all the pairs, and figure out what each will contribute to the counts of the *next* iteration
         for (String pair : pairCounts.keySet()) {
             // Add the new letter to letterCounts
-            final Character newLetter = insertions.get(pair);
-            // The number of occurrences of newLetter will be the number of times the pair that generates it occurs
+            final Character newChar = insertions.get(pair);
+            // The number of occurrences of newChar will be the number of times the pair that generates it occurs
             final Long pairCount = pairCounts.get(pair);
-            letterCounts.put(newLetter,
-                    letterCounts.getOrDefault(newLetter, 0L) + 1 * pairCount);
+            letterCounts.put(newChar,
+                    letterCounts.getOrDefault(newChar, 0L) + 1 * pairCount);
             // Add the new pairs to pairDeltas
             // E.g. BN -> C creates a BC & CN
-            final Character pair1 = pair.charAt(0);
-            final Character pair2 = pair.charAt(1);
-            final String newPair1 = new StringBuilder().append(pair1).append(newLetter).toString();
-            final String newPair2 = new StringBuilder().append(newLetter).append(pair2).toString();
+            final Character char1 = pair.charAt(0);
+            final Character char2 = pair.charAt(1);
+            final String newPair1 = new StringBuilder().append(char1).append(newChar).toString();
+            final String newPair2 = new StringBuilder().append(newChar).append(char2).toString();
             // The number of occurrences added or removed will be the number of times the pair occurs
             pairDeltas.put(newPair1,
                     pairDeltas.getOrDefault(newPair1, 0L) + 1 * pairCount);
             pairDeltas.put(newPair2,
                     pairDeltas.getOrDefault(newPair2, 0L) + 1 * pairCount);
-            // And finally remove the old pair
+            // And finally remove the old pair (e.g. 'BN')
             pairDeltas.put(pair, pairDeltas.getOrDefault(pair, 0L) - 1 * pairCount);
         }
 
@@ -131,24 +123,22 @@ public class Day14Service {
 
     // load inputs line-by-line and apply a regex to extract fields
     private void loadInputs(String pathToFile) {
-        inputList.clear();
-        try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
+        chain.clear();
+        try (final BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
             String line;
-            Integer nextInt = 0;
             // Read the first line (the starting chain)
-            line = br.readLine();
-            inputLine = line;
+            inputLine = br.readLine();
             // Make it into a LinkedList
-            Arrays.stream(line.split("")).forEach(c -> inputList.add(c));
+            Arrays.stream(inputLine.split("")).forEach(c -> chain.add(c));
             br.readLine();  // skip the blank line
-            Pattern p = Pattern.compile("(\\w{2}) -> (\\w)");
+            final Pattern p = Pattern.compile("(\\w{2}) -> (\\w)");
             while ((line = br.readLine()) != null) {
                 // process the line.
-                Matcher m = p.matcher(line);
+                final Matcher m = p.matcher(line);
                 if (m.find()) { // If our regex matched this line
                     // Parse it
-                    String pair = m.group(1);
-                    String insertion = m.group(2);
+                    final String pair = m.group(1);
+                    final String insertion = m.group(2);
                     insertions.put(pair, insertion.charAt(0));
                 }
             }
