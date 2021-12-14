@@ -42,7 +42,7 @@ public class Day14Test {
             day14Service = new Day14Service(PUZZLE_INPUT, PUZZLE_DEBUG);
         }
 
-        final long EXPECTED = 0;
+        final long EXPECTED = 3941782230241L;
         long result = 0;
         try {
             result = day14Service.doPartB();
@@ -55,7 +55,6 @@ public class Day14Test {
 
     @Test
     @Order(3)   // Run before Example Part B
-    @Disabled
     public void Day14AExample1() {
         example1Service = new Day14Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
         final long EXPECTED = 1588;
@@ -70,12 +69,11 @@ public class Day14Test {
 
     @Test
     @Order(4)   // Run after Example Part A
-    @Disabled
     public void Day14BExample1() {
         // Instantiate the service if Part A was skipped
         if (example1Service == null) example1Service = new Day14Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
 
-        final long EXPECTED = 0;
+        final long EXPECTED = 2188189693529L;
         long result = 0;
         try {
             result = example1Service.doPartB();
