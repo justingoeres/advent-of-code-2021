@@ -42,7 +42,7 @@ public class Day15Test {
             day15Service = new Day15Service(PUZZLE_INPUT, PUZZLE_DEBUG);
         }
 
-        final long EXPECTED = 0;
+        final long EXPECTED = 2823;
         long result = 0;
         try {
             result = day15Service.doPartB();
@@ -75,7 +75,7 @@ public class Day15Test {
         // Instantiate the service if Part A was skipped
         if (example1Service == null) example1Service = new Day15Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
 
-        final long EXPECTED = 0;
+        final long EXPECTED = 315;
         long result = 0;
         try {
             result = example1Service.doPartB();

@@ -4,11 +4,7 @@ import org.jgoeres.adventofcode.common.XYPoint;
 
 public class Cave {
     private final XYPoint xy;
-    private Integer totalRisk;
-
-    public Cave(XYPoint xy) {
-        this.xy = xy;
-    }
+    private final Integer totalRisk;
 
     public Cave(XYPoint xy, Integer totalRisk) {
         this.xy = xy;
@@ -21,10 +17,6 @@ public class Cave {
 
     public Integer getTotalRisk() {
         return totalRisk;
-    }
-
-    public void setTotalRisk(Integer totalRisk) {
-        this.totalRisk = totalRisk;
     }
 
     @Override
