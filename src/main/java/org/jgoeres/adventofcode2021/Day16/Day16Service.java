@@ -23,13 +23,13 @@ public class Day16Service {
     public long doPartA() {
         System.out.println("=== DAY 16A ===");
 
-        long result = 0;
         /**
          * Decode the structure of your hexadecimal-encoded BITS transmission;
          * what do you get if you add up the version numbers in all packets?
          **/
 
         transmission.decode();
+        long result = transmission.addUpVersions();
 
         System.out.println("Day 16A: Answer = " + result);
         return result;

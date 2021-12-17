@@ -29,6 +29,7 @@ public class Transmission {
         while (bitsLeft < width) {
             // Get the next byte
             final Integer nextByte = iter.next();
+//            System.out.println("Read Byte:\t" + String.format("0x%02X", nextByte));
             // Shift the current buffer up to make room
             currentByte <<= BYTE_WIDTH;
             // Add the nextByte in
@@ -57,11 +58,20 @@ public class Transmission {
     }
 
     public void decode() {
-        while (true) {
+        while (iter.hasNext()) {
             decodeNextPacket(packets);
             // When we're done with a packet, sweep out the trailing zeroes
             this.alignNextPacket();
         }
+    }
+
+    public Integer addUpVersions() {
+        Integer total = 0;
+        // Add up the version number for every packet (recursively) in this transmission
+        for (Packet packet : packets) {
+            total += packet.getTotalVersion();
+        }
+        return total;
     }
 
     public Integer decodeNextPacket(List<Packet> packets) {
@@ -91,29 +101,10 @@ public class Transmission {
 
         switch (typeID) {
             case 4: // literal value
-                bitsConsumed += this.decodeLiteralValuePacket(packets, version, typeID);
-//                literalValuePacket.setVersion(version);
-//                literalValuePacket.setTypeID(typeID);
-//                packets.add(literalValuePacket);
+                bitsConsumed += decodeLiteralValuePacket(packets, version, typeID);
                 break;
             default: // operator packet
-                OperatorPacket operatorPacket = new OperatorPacket();
-                // get the length type ID
-                Integer lengthTypeID = this.getNextValue(1);
-                if (lengthTypeID == 0) {
-                    // 0: next 15 bits are TOTAL LENGTH of subpackets
-                    Integer totalSubpacketLength = this.getNextValue(15);
-                    Integer subpacketBitsConsumed = 0;
-                    while (subpacketBitsConsumed < totalSubpacketLength) {
-                        subpacketBitsConsumed +=
-                                this.decodeNextPacket(operatorPacket.getChildPackets());
-                    }
-                    bitsConsumed += subpacketBitsConsumed;
-                } else {
-                    // 1: next 11 bits are # of subpackets
-                    Integer numSubpackets = this.getNextValue(11);
-                }
-                packets.add(operatorPacket);
+                bitsConsumed += decodeOperatorPacket(packets, version, typeID);
                 // Now that we've got the length of the contained packet(s)
                 // in some form
                 break;
@@ -121,8 +112,33 @@ public class Transmission {
         return bitsConsumed;
     }
 
-    private OperatorPacket getOperatorPacket() {
-        return null;
+    private Integer decodeOperatorPacket(List<Packet> packets, Integer version,
+                                         Integer typeID) {
+        Integer bitsConsumed = 0;
+        OperatorPacket operatorPacket = new OperatorPacket(version, typeID);
+        // get the length type ID
+        Integer lengthTypeID = this.getNextValue(1);
+        bitsConsumed += 1;
+        Integer subpacketBitsConsumed = 0;
+        if (lengthTypeID == 0) {
+            // 0: next 15 bits are TOTAL LENGTH of subpackets
+            Integer totalSubpacketLength = this.getNextValue(15);
+            bitsConsumed += 15;
+            while (subpacketBitsConsumed < totalSubpacketLength) {
+                subpacketBitsConsumed +=
+                        this.decodeNextPacket(operatorPacket.getChildPackets());
+            }
+        } else {
+            // 1: next 11 bits are # of subpackets
+            Integer numSubpackets = this.getNextValue(11);
+            bitsConsumed += 11;
+            for (int i = 0; i < numSubpackets; i++) {
+                subpacketBitsConsumed += this.decodeNextPacket(operatorPacket.getChildPackets());
+            }
+        }
+        bitsConsumed += subpacketBitsConsumed;
+        packets.add(operatorPacket);
+        return bitsConsumed;
     }
 
     private Integer decodeLiteralValuePacket(List<Packet> packets, Integer version,
@@ -130,7 +146,7 @@ public class Transmission {
         // literal values are 4-bit numbers prefixed by
         //     a 1 if NOT the final group
         //     a 0 if YES the final group
-        Integer literalValue = 0;
+        Long literalValue = 0L;
         Integer bitsConsumed = 0;
         final Integer LITERAL_GROUP_WIDTH = 5;
         while (true) {  // do it until we hit an end group
@@ -143,7 +159,7 @@ public class Transmission {
                 break;
             }
         }
-        System.out.println("Literal value: " + literalValue);
+//        System.out.println("Literal value: " + literalValue);
         packets.add(new LiteralValuePacket(literalValue, version, typeID));
         return bitsConsumed;
     }
