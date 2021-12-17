@@ -9,11 +9,8 @@ public class MaxPacket extends OperatorPacket {
 
     @Override
     public Long getValue() {
-        // Packets with type ID 0 are sum packets -
-        // their value is the sum of the values of their sub-packets.
-        //
-        // If they only have a single sub-packet, their value is the
-        // value of the sub-packet.
+        // Packets with type ID 3 are maximum packets -
+        // their value is the maximum of the values of their sub-packets.
         return getChildPackets().stream()
                 .mapToLong(packet -> packet.getValue()).max().getAsLong();
     }
