@@ -3,9 +3,6 @@ package org.jgoeres.adventofcode2021.Day16;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.BlockingDeque;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,75 +29,7 @@ public class Day16Service {
          * what do you get if you add up the version numbers in all packets?
          **/
 
-        // HEADER
-        //  3 bits - packet version
-        //  3 bits - type ID
-        //      type ID: 4
-        //          literal value
-        //          literal values are 4-bit fields prefixed by
-        //              a 1 if NOT the final group
-        //              a 0 if YES the final group
-        //              padded with leading zeroes to make a field length of multiple of 4 bits
-        //      type ID: other
-        //          operator packet
-        //          contains one or more packets
-        //          1 bit - length type ID
-        //              0: next 15 bits are TOTAL LENGTH of subpackets
-        //              1: next 11 bits are # of subpackets
-        //          Followed by subpackets (which themselves can be literals or operators)
-        //  Then the end is zero-padded to match up with byte boundaries? (I hope)
-
-        Integer version = transmission.getNextValue(3);
-        Integer typeID = transmission.getNextValue(3);
-        switch (typeID) {
-            case 4: // literal value
-                Integer literValue = transmission.getLiteralValue();
-                break;
-            default:
-                break;
-        }
-
-//        Iterator<Integer> iter = inputList.iterator();
-//        // Parse a packet!
-//        // Get the next byte
-//        Integer packetByte = iter.next();
-//        // Version is top 3 bits
-//        final Integer versionMask = 0b11100000;
-//        final Integer versionShift = 5;
-//        // Type ID is next 3 bits
-//        final Integer typeIDMask = 0b00011100;
-//        final Integer typeIDShift = 2;
-//
-//        Integer version = (packetByte & versionMask) >> versionShift;
-//        Integer typeID = (packetByte & typeIDMask) >> typeIDShift;
-//
-//        packetByte &=
-//                0b00000011;   // Drop the version & type ID to leave just the begining of the value
-//        Integer bitsLeft = 2;   // 2 unprocessed bits
-//        switch (typeID) {
-//            case 4: // literal value
-//                if (bitsLeft < 5) {
-//                    // If we don't have enough bits available to check, get some!
-//                    Integer nextByte = iter.next();
-//                    packetByte = (packetByte << 8) ^ nextByte;
-//                    bitsLeft += 8;
-//                    // Now we have 8 more bits!
-//                    // Mask the top 5
-//                    Integer mask = 0b11111 << (bitsLeft -= 5);
-//                    // Mask the next group & shift it down so we can work with it
-//                    Integer nextGroup = (packetByte & mask) >> bitsLeft;
-//                    Boolean moreGroups;
-//                    Integer groupValue = 0;
-//                    while (moreGroups = (nextGroup & 0b10000) > 0))
-//                    Integer nextValue = nextGroup & 0b1111;
-//                    groupValue = groupValue << 4 + nextValue;
-//
-//                }
-//                break;
-//            default: // operator
-//                // TODO
-//                break;
-//    }
+        transmission.decode();
 
         System.out.println("Day 16A: Answer = " + result);
         return result;
