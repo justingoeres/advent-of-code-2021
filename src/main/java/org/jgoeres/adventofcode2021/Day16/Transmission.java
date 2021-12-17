@@ -3,13 +3,13 @@ package org.jgoeres.adventofcode2021.Day16;
 import org.jgoeres.adventofcode2021.Day16.packet.LiteralValuePacket;
 import org.jgoeres.adventofcode2021.Day16.packet.OperatorPacket;
 import org.jgoeres.adventofcode2021.Day16.packet.Packet;
+import org.jgoeres.adventofcode2021.Day16.packet.operator.*;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class Transmission {
-    private final ArrayList<Integer> packetBytes;
     private final Iterator<Integer> iter;
     private Integer bitsLeft = 0;
     private Integer currentByte = 0;
@@ -18,7 +18,6 @@ public class Transmission {
     private final List<Packet> packets = new ArrayList<>();
 
     public Transmission(ArrayList<Integer> packetBytes) {
-        this.packetBytes = packetBytes;
         this.iter = packetBytes.iterator();
     }
 
@@ -57,6 +56,10 @@ public class Transmission {
         return result;
     }
 
+    public Packet getOuterPacket() {
+        return packets.get(0);
+    }
+
     public void decode() {
         while (iter.hasNext()) {
             decodeNextPacket(packets);
@@ -72,6 +75,11 @@ public class Transmission {
             total += packet.getTotalVersion();
         }
         return total;
+    }
+
+    public Long getTotalValue() {
+        // Get the value of the whole transmission
+        return 0L;
     }
 
     public Integer decodeNextPacket(List<Packet> packets) {
@@ -115,7 +123,7 @@ public class Transmission {
     private Integer decodeOperatorPacket(List<Packet> packets, Integer version,
                                          Integer typeID) {
         Integer bitsConsumed = 0;
-        OperatorPacket operatorPacket = new OperatorPacket(version, typeID);
+        OperatorPacket operatorPacket = getOperatorPacketType(version, typeID);
         // get the length type ID
         Integer lengthTypeID = this.getNextValue(1);
         bitsConsumed += 1;
@@ -139,6 +147,27 @@ public class Transmission {
         bitsConsumed += subpacketBitsConsumed;
         packets.add(operatorPacket);
         return bitsConsumed;
+    }
+
+    private OperatorPacket getOperatorPacketType(Integer version, Integer typeId) {
+        // Mini-factory for operator packets
+        switch (typeId) {
+            case 0: // sum
+                return new SumPacket(version, typeId);
+            case 1: // product
+                return new ProductPacket(version, typeId);
+            case 2: // min
+                return new MinPacket(version, typeId);
+            case 3: // max
+                return new MaxPacket(version, typeId);
+            case 5: // greater than
+                return new GreaterThanPacket(version, typeId);
+            case 6: // less than
+                return new LessThanPacket(version, typeId);
+            case 7: // equals
+                return new EqualsPacket(version, typeId);
+        }
+        return null; // should never happen
     }
 
     private Integer decodeLiteralValuePacket(List<Packet> packets, Integer version,

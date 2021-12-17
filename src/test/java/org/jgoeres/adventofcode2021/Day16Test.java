@@ -27,12 +27,12 @@ public class Day16Test {
 
     @Test
     @Order(1)   // Run before Puzzle Part B
-    public void Day16A() {
+    public void Day16() {
         if (day16Service == null) {
             day16Service = new Day16Service(PUZZLE_INPUT, PUZZLE_DEBUG);
         }
 
-        final long EXPECTED = 974;
+        final long EXPECTED_PARTA = 974;
         long result = 0;
         try {
             result = day16Service.doPartA();
@@ -40,25 +40,17 @@ public class Day16Test {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        assertEquals(EXPECTED, result);
-    }
+        assertEquals(EXPECTED_PARTA, result);
 
-    @Test
-    @Order(2)   // Run after Puzzle Part A
-    public void Day16B() {
-        if (day16Service == null) {
-            day16Service = new Day16Service(PUZZLE_INPUT, PUZZLE_DEBUG);
-        }
 
-        final long EXPECTED = 0;
-        long result = 0;
+        final long EXPECTED_PARTB = 180616437720L;
         try {
             result = day16Service.doPartB();
             ToClipboard.set(result);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        assertEquals(EXPECTED, result);
+        assertEquals(EXPECTED_PARTB, result);
     }
 
     @Test
@@ -152,7 +144,7 @@ public class Day16Test {
         }
         assertEquals(EXPECTED, result);
     }
-    
+
     @Test
     @Order(4)   // Run after Example Part A
     @Disabled

@@ -38,7 +38,10 @@ public class Day16Service {
     public long doPartB() {
         System.out.println("=== DAY 16B ===");
 
-        long result = 0;
+        // Assume we've already run Part A to decode the transmission.
+        // The transmission is actually ONE huge packet, so the total value
+        // is just the value of that one packet
+        long result = transmission.getOuterPacket().getValue();
         /** Put problem implementation here **/
 
         System.out.println("Day 16B: Answer = " + result);

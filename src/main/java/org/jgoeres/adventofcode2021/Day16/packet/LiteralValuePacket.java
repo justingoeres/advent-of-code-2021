@@ -14,6 +14,7 @@ public class LiteralValuePacket extends AbstractPacket {
         return getVersion();
     }
 
+    @Override
     public Long getValue() {
         return value;
     }
