@@ -56,30 +56,12 @@ public class Transmission {
         return result;
     }
 
-    public Packet getOuterPacket() {
-        return packets.get(0);
-    }
-
     public void decode() {
         while (iter.hasNext()) {
             decodeNextPacket(packets);
             // When we're done with a packet, sweep out the trailing zeroes
             this.alignNextPacket();
         }
-    }
-
-    public Integer addUpVersions() {
-        Integer total = 0;
-        // Add up the version number for every packet (recursively) in this transmission
-        for (Packet packet : packets) {
-            total += packet.getTotalVersion();
-        }
-        return total;
-    }
-
-    public Long getTotalValue() {
-        // Get the value of the whole transmission
-        return 0L;
     }
 
     public Integer decodeNextPacket(List<Packet> packets) {
@@ -191,6 +173,19 @@ public class Transmission {
 //        System.out.println("Literal value: " + literalValue);
         packets.add(new LiteralValuePacket(literalValue, version, typeID));
         return bitsConsumed;
+    }
+
+    public Integer addUpVersions() {
+        Integer total = 0;
+        // Add up the version number for every packet (recursively) in this transmission
+        for (Packet packet : packets) {
+            total += packet.getTotalVersion();
+        }
+        return total;
+    }
+
+    public Packet getOuterPacket() {
+        return packets.get(0);
     }
 
     public Integer alignNextPacket() {
