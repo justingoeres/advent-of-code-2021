@@ -16,6 +16,4 @@ public abstract class AoCMath {
         int zDistance = Math.abs(p0.getZ() - p1.getZ());
         return (xDistance + yDistance + zDistance);
     }
-
-
 }

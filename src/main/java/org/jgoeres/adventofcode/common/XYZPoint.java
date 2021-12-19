@@ -105,7 +105,6 @@ public class XYZPoint extends XYPoint {
         return xyzToReference;
     }
 
-
     public enum Axis {
         X_AXIS,
         Y_AXIS,

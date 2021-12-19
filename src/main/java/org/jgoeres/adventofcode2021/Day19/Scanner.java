@@ -23,10 +23,6 @@ public class Scanner {
     public List<XYZPoint> getBeaconsToReference(final XYZPoint reference) {
         // Return a list of XYZPoints (our beacons) translated so that they're relative to the 'reference' point
         final List<XYZPoint> beaconsToReference = XYZPoint.getXYZToReference(beacons, reference);
-
-        // Update the position of the scanner – it's the flip of all coords of the reference point
-//        position = XYZPoint.getXYZToReference(XYZPoint.ORIGIN_XYZ, reference);
-
         return beaconsToReference;
     }
 

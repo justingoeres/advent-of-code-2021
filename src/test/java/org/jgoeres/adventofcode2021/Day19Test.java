@@ -46,7 +46,6 @@ public class Day19Test {
 
     @Test
     @Order(3)   // Run before Example Part B
-    @Disabled
     public void Day19Example1() {
         example1Service = new Day19Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
         final long EXPECTED_PARTA = 79;

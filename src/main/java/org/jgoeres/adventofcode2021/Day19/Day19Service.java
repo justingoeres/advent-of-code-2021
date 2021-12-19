@@ -1,7 +1,6 @@
 package org.jgoeres.adventofcode2021.Day19;
 
 import static org.jgoeres.adventofcode.common.XYZPoint.Axis.*;
-import static org.jgoeres.adventofcode.common.XYZPoint.ORIGIN_XYZ;
 import org.jgoeres.adventofcode.common.AoCMath;
 import org.jgoeres.adventofcode.common.RotationStep;
 import org.jgoeres.adventofcode.common.XYZPoint;
@@ -53,6 +52,18 @@ public class Day19Service {
         // Calculate all the RELATIVE beacon coordinates TO THAT POINT.
         // That gives us a search space anchored on a beacon that MAY exist
         // on other scanners
+        //
+        // If we get through all 24 rotations without a match
+        // start over with the NEXT point in scanner 1 (point 1).
+        //
+        // If we get all the way through all the scanner 1 points without a match,
+        // Repeat all of the above with scanner 2.
+
+        // If we DO find a match, then convert all that scanner's beacon
+        // coordinates to relative-to-scanner-0 and
+        // add them to our "known universe" Set(?)
+        // By doing this, we build up a "map of the universe" gradually
+        // And can keep matching scanners to it until we're done
 
         // referenceBeacons are the set of beacons for the CURRENT scanner,
         // translated so that ONE of the beacons is at 0,0,0
@@ -60,10 +71,8 @@ public class Day19Service {
         // Remove scanner 0 because we don't need to reprocess it
         scanners.remove(0);
 
-//        final XYZPoint referenceBeacon = referenceScanner.getBeacons().get(0);
         // From there, take each scanner (our 'scannerEntry').
         // Take each beacon on that scanner (our 'candidateReference').
-
         while (!scanners.isEmpty()) {
             System.out.println(scanners.size() + " scanners unmapped; universe size:\t " +
                     knownUniverse.size());
@@ -99,13 +108,6 @@ public class Day19Service {
 //                            System.out.println("Found a match!");
                             // If we found a matching rotation, next we need to
                             // 0. Put the universe coordinates of this scanner into the universeScanners list
-                            //      Somehow the universe coordinates of the scanner are
-//                                  referenceBeacon + candidateReference
-//                            XYZPoint universeScannerPosition = new XYZPoint(
-//                                    referenceBeacon.getX() + candidateReference.getX(),
-//                                    referenceBeacon.getY() + candidateReference.getY(),
-//                                    referenceBeacon.getZ() + candidateReference.getZ()
-//                            );
                             universeScannerPosition.translate(referenceBeacon);
                             universeScanners.add(universeScannerPosition);
                             // 1. translate all the beacons into "universe" coordinates
@@ -130,20 +132,6 @@ public class Day19Service {
             }
             knownUniverse.addAll(beaconsToAdd);
         }
-        // So try again, but with the scanner-1-relative set ROTATED.
-
-        //
-        // If we get through all 24 rotations without a match
-        // start over with the NEXT point in scanner 1 (point 1).
-        //
-        // If we get all the way through all the scanner 1 points without a match,
-        // Repeat all of the above with scanner 2.
-
-        // If we DO find a match, then convert all that scanner's beacon
-        // coordinates to relative-to-scanner-0 and
-        // add them to our "known universe" Set(?)
-        // By doing this, we build up a "map of the universe" gradually
-        // And can keep matching scanners to it until we're done
 
         long result = knownUniverse.size();
         System.out.println("Day 19A: Answer = " + result);
