@@ -24,13 +24,14 @@ public class Day19Test {
             day19Service = new Day19Service(PUZZLE_INPUT, PUZZLE_DEBUG);
         }
 
-        final long EXPECTED = 0;
+        final long EXPECTED = 512;
         long result = 0;
         try {
             result = day19Service.doPartA();
             ToClipboard.set(result);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(e);
+            e.printStackTrace();
         }
         assertEquals(EXPECTED, result);
     }
@@ -58,12 +59,13 @@ public class Day19Test {
     @Disabled
     public void Day19AExample1() {
         example1Service = new Day19Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
-        final long EXPECTED = 0;
+        final long EXPECTED = 79;
         long result = 0;
         try {
             result = example1Service.doPartA();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(e);
+            e.printStackTrace();
         }
         assertEquals(EXPECTED, result);
     }
