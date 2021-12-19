@@ -1,14 +1,17 @@
 package org.jgoeres.adventofcode2021.Day19;
+
+import org.jgoeres.adventofcode.common.XYZPoint;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day19Service {
     public boolean DEBUG = false;
 
-    private ArrayList<Integer> inputList = new ArrayList<>();
+    private final Map<Integer, Scanner> scanners = new HashMap<>();
 
     public Day19Service(String pathToFile) {
         loadInputs(pathToFile);
@@ -41,19 +44,27 @@ public class Day19Service {
 
     // load inputs line-by-line and apply a regex to extract fields
     private void loadInputs(String pathToFile) {
-        inputList.clear();
+        scanners.clear();
         try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
             String line;
-            Integer nextInt = 0;
-            /** Replace this regex **/
-            Pattern p = Pattern.compile("([FB]{7})([LR]{3})");
+            final Pattern p1 = Pattern.compile("--- scanner (\\d+)");
+            final Pattern p2 = Pattern.compile("(-?\\d{1,3}),(-?\\d{1,3}),(-?\\d{1,3})");
+            Scanner scanner = null;
             while ((line = br.readLine()) != null) {
                 // process the line.
-                Matcher m = p.matcher(line);
-                if (m.find()) { // If our regex matched this line
-                    // Parse it
-                    String field1 = m.group(1);
-                    String field2 = m.group(2);
+                final Matcher m1 = p1.matcher(line);
+                final Matcher m2 = p2.matcher(line);
+                if (m1.find()) { // If this is a new scanner
+                    // Create a scanner
+                    scanner = new Scanner();
+                    scanners.put(Integer.parseInt(m1.group(1)), scanner);
+                } else if (m2.find()) { // If this is a beacon
+                    // Create a beacon and add it to the scanner
+                    final Integer x = Integer.parseInt(m2.group(1));
+                    final Integer y = Integer.parseInt(m2.group(2));
+                    final Integer z = Integer.parseInt(m2.group(3));
+                    final XYZPoint beacon = new XYZPoint(x, y, z);
+                    scanner.add(beacon);
                 }
             }
         } catch (Exception e) {
