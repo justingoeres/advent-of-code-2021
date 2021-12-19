@@ -90,13 +90,18 @@ public class XYZPoint extends XYPoint {
         return this;
     }
 
-    public static List<XYZPoint> getXYZToReference(final Collection<XYZPoint> xyzPoints, final XYZPoint reference) {
-        // Return a list of XYZPoints (our beacons) translated so that they're relative to the 'reference' point
-        final List<XYZPoint> xyzToReference = new ArrayList<>();
-        xyzPoints.stream().forEach(xyz -> xyzToReference.add(new XYZPoint(
+    public static XYZPoint getXYZToReference(final XYZPoint xyz, XYZPoint reference) {
+        return (new XYZPoint(
                 xyz.getX() - reference.getX(),
                 xyz.getY() - reference.getY(),
-                xyz.getZ() - reference.getZ())));
+                xyz.getZ() - reference.getZ()));
+    }
+
+    public static List<XYZPoint> getXYZToReference(final Collection<XYZPoint> xyzPoints,
+                                                   final XYZPoint reference) {
+        // Return a list of XYZPoints translated so that they're relative to the 'reference' point
+        final List<XYZPoint> xyzToReference = new ArrayList<>();
+        xyzPoints.stream().forEach(xyz -> xyzToReference.add(getXYZToReference(xyz, reference)));
         return xyzToReference;
     }
 

@@ -2,6 +2,7 @@ package org.jgoeres.adventofcode2021.Day19;
 
 import static org.jgoeres.adventofcode.common.XYZPoint.Axis.*;
 import static org.jgoeres.adventofcode.common.XYZPoint.ORIGIN_XYZ;
+import org.jgoeres.adventofcode.common.AoCMath;
 import org.jgoeres.adventofcode.common.RotationStep;
 import org.jgoeres.adventofcode.common.XYZPoint;
 import java.io.BufferedReader;
@@ -9,13 +10,14 @@ import java.io.FileReader;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Day19Service {
     public boolean DEBUG = false;
 
     private final Map<Integer, Scanner> scanners = new HashMap<>();
     private final Set<XYZPoint> knownUniverse = new HashSet<>();
-
+    private Set<XYZPoint> universeScanners = new HashSet<>();
 
     public Day19Service(String pathToFile) {
         loadInputs(pathToFile);
@@ -44,6 +46,7 @@ public class Day19Service {
 
         // Add all of scanner 0 to the known universe
         scanners.get(0).getBeacons().stream().forEach(xyz -> knownUniverse.add(xyz));
+        universeScanners.add(scanners.get(0).getPosition());
 
         // If we take Scanner 0 as our reference for position & orientation
         // Then Take point 0 of scanner 0.
@@ -62,13 +65,13 @@ public class Day19Service {
         // Take each beacon on that scanner (our 'candidateReference').
 
         while (!scanners.isEmpty()) {
-            System.out.println("=== NEW SCAN === (" + scanners.size() +
-                    " scanners unmapped; universe size:\t " + knownUniverse.size() + ")");
+            System.out.println(scanners.size() + " scanners unmapped; universe size:\t " +
+                    knownUniverse.size());
             Set<XYZPoint> beaconsToAdd = new HashSet<>();
+            // For each beacon in the known universe
             for (XYZPoint referenceBeacon : knownUniverse) {
 //                System.out.println("Referencing to knownUniverse point (" + referenceBeacon + ")");
-//                final List<XYZPoint> referenceBeacons =
-//                        referenceScanner.getBeaconsToReference(referenceBeacon);
+
                 List<XYZPoint> referenceBeacons =
                         XYZPoint.getXYZToReference(knownUniverse, referenceBeacon);
                 Set<Integer> scannersToRemove = new HashSet<>();
@@ -85,22 +88,39 @@ public class Day19Service {
                         final List<XYZPoint> candidateBeacons =
                                 candidateScanner.getBeaconsToReference(candidateReference);
                         // See if they match the coordinates of enough reference beacons
+                        final XYZPoint universeScannerPosition =
+                                new XYZPoint(-candidateReference.getX(),
+                                        -candidateReference.getY(),
+                                        -candidateReference.getZ());
                         final Boolean foundMatchingRotation =
-                                checkAllRotations(referenceBeacons, candidateBeacons);
+                                checkAllRotations(referenceBeacons, candidateBeacons,
+                                        universeScannerPosition);
                         if (foundMatchingRotation) {
 //                            System.out.println("Found a match!");
                             // If we found a matching rotation, next we need to
+                            // 0. Put the universe coordinates of this scanner into the universeScanners list
+                            //      Somehow the universe coordinates of the scanner are
+//                                  referenceBeacon + candidateReference
+//                            XYZPoint universeScannerPosition = new XYZPoint(
+//                                    referenceBeacon.getX() + candidateReference.getX(),
+//                                    referenceBeacon.getY() + candidateReference.getY(),
+//                                    referenceBeacon.getZ() + candidateReference.getZ()
+//                            );
+                            universeScannerPosition.translate(referenceBeacon);
+                            universeScanners.add(universeScannerPosition);
                             // 1. translate all the beacons into "universe" coordinates
                             //      by moving them relative to the referenceBeacon
                             // 2. Add them to the known universe
-                            //                candidateBeacons.stream().forEach(xyz -> xyz.translate(referenceBeacon));
-                            //                candidateBeacons.stream().forEach(xyz -> knownUniverse.add(xyz));
+
                             candidateBeacons.stream().forEach(xyz -> {
                                 xyz.translate(referenceBeacon);
-//                                knownUniverse.add(xyz);
                                 beaconsToAdd.add(xyz);
-                                // Finally, remove this scanner from the remaining scanners to check
                             });
+                            // Locate this scanner in universe coordinates
+                            // The scanner location relative TO THE REFERENCE BEACON
+                            // is the flip of all the coordinates of the beacon
+
+                            // Finally, remove this scanner from the remaining scanners to check
                             scannersToRemove.add(scannerEntry.getKey());
                             break;
                         }
@@ -131,7 +151,8 @@ public class Day19Service {
     }
 
     private Boolean checkAllRotations(final List<XYZPoint> referenceBeacons,
-                                      final List<XYZPoint> candidateBeacons) {
+                                      final List<XYZPoint> candidateBeacons,
+                                      XYZPoint scannerPosition) {
         for (final RotationStep rotation : allRotations) {
             // Rotate the candidateBeacons into the orientation we're testing
 //            System.out.println(
@@ -140,6 +161,9 @@ public class Day19Service {
             for (final XYZPoint beacon : candidateBeacons) {
                 beacon.rotate(rotation.getAxis(), rotation.getTimes());
             }
+            // Also rotate the scanner position?
+            scannerPosition.rotate(rotation.getAxis(), rotation.getTimes());
+
             // Now check all the candidate (rotated) candidate beacons against our reference
             // If any match a coordinate in the relative-Scanner-0 list, increment
             // a counter.
@@ -167,11 +191,17 @@ public class Day19Service {
     public long doPartB() {
         System.out.println("=== DAY 19B ===");
 
-        long result = 0;
-        /** Put problem implementation here **/
+        /**
+         * What is the largest Manhattan distance between any two scanners?
+         **/
 
-        System.out.println("Day 19B: Answer = " + result);
-        return result;
+        Integer maxDistance = universeScanners.stream().map(xyz1 ->
+                        universeScanners.stream().map(xyz2 -> AoCMath.manhattanDistance(xyz1, xyz2))
+                                .collect(Collectors.toList())).flatMap(Collection::stream)
+                .collect(Collectors.toList()).stream().max(Integer::compareTo).get();
+
+        System.out.println("Day 19B: Answer = " + maxDistance);
+        return maxDistance;
     }
 
     // load inputs line-by-line and apply a regex to extract fields
@@ -199,8 +229,6 @@ public class Day19Service {
                     scanner.add(beacon);
                 }
             }
-            // Stick scanner 0 at 0,0,0
-            scanners.get(0).setPosition(new XYZPoint(0, 0, 0));
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e);
         }
