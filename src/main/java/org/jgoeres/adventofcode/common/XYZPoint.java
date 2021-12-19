@@ -1,5 +1,8 @@
 package org.jgoeres.adventofcode.common;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 public class XYZPoint extends XYPoint {
@@ -86,6 +89,17 @@ public class XYZPoint extends XYPoint {
         this.setZ(this.getZ() + xyz.getZ());
         return this;
     }
+
+    public static List<XYZPoint> getXYZToReference(final Collection<XYZPoint> xyzPoints, final XYZPoint reference) {
+        // Return a list of XYZPoints (our beacons) translated so that they're relative to the 'reference' point
+        final List<XYZPoint> xyzToReference = new ArrayList<>();
+        xyzPoints.stream().forEach(xyz -> xyzToReference.add(new XYZPoint(
+                xyz.getX() - reference.getX(),
+                xyz.getY() - reference.getY(),
+                xyz.getZ() - reference.getZ())));
+        return xyzToReference;
+    }
+
 
     public enum Axis {
         X_AXIS,

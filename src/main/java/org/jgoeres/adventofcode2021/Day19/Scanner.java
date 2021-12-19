@@ -19,11 +19,7 @@ public class Scanner {
 
     public List<XYZPoint> getBeaconsToReference(final XYZPoint reference) {
         // Return a list of XYZPoints (our beacons) translated so that they're relative to the 'reference' point
-        final List<XYZPoint> beaconsToReference = new ArrayList<>();
-        beacons.stream().forEach(xyz -> beaconsToReference.add(new XYZPoint(
-                xyz.getX() - reference.getX(),
-                xyz.getY() - reference.getY(),
-                xyz.getZ() - reference.getZ())));
+        final List<XYZPoint> beaconsToReference = XYZPoint.getXYZToReference(beacons, reference);
         return beaconsToReference;
     }
 

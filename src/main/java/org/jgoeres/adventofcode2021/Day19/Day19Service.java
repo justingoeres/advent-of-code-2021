@@ -56,34 +56,49 @@ public class Day19Service {
         // translated so that ONE of the beacons is at 0,0,0
         final Scanner referenceScanner = scanners.get(0);
         final XYZPoint referenceBeacon = referenceScanner.getBeacons().get(0);
-        final List<XYZPoint> referenceBeacons =
-                referenceScanner.getBeaconsToReference(referenceBeacon);
+        // Remove scanner 0 because we don't need to reprocess it
+        scanners.remove(0);
 
-        // From there, take scanner 1.
-        // Take point 0 on scanner 1.
-        Scanner candidateScanner = scanners.get(1);
-        for (XYZPoint candidateReference : candidateScanner.getBeacons()) {
-            System.out.println(
-                    "Checking candidate reference point:\t" + candidateReference.toString());
-            // Calculate the RELATIVE beacon coordinates TO THAT POINT.
-            final List<XYZPoint> candidateBeacons =
-                    candidateScanner.getBeaconsToReference(candidateReference);
-            final Boolean foundMatchingRotation =
-                    checkAllRotations(referenceBeacons, candidateBeacons);
-            if (foundMatchingRotation) {
-                System.out.println("Found a match!");
-                // If we found a matching rotation, next we need to
-                // 1. translate all the beacons into "universe" coordinates
-                //      by moving them relative to the referenceBeacon
-                // 2. Add them to the known universe
-//                candidateBeacons.stream().forEach(xyz -> xyz.translate(referenceBeacon));
-//                candidateBeacons.stream().forEach(xyz -> knownUniverse.add(xyz));
-                candidateBeacons.stream().forEach(xyz -> {
-                    xyz.translate(referenceBeacon);
-                    knownUniverse.add(xyz);
-                });
-                break;
+        // From there, take each scanner (our 'scannerEntry').
+        // Take each beacon on that scanner (our 'candidateReference').
+        while (!scanners.isEmpty()) {
+            final List<XYZPoint> referenceBeacons =
+                    referenceScanner.getBeaconsToReference(referenceBeacon);
+            Set<Integer> scannersToRemove = new HashSet<>();
+            for (final Map.Entry<Integer, Scanner> scannerEntry : scanners.entrySet()) {
+//                scanners.remove(scannerEntry.getKey());
+                System.out.println("Checking scanner " + scannerEntry.getKey());
+                //            Scanner candidateScanner = scanners.get(1);
+                Scanner candidateScanner = scannerEntry.getValue();
+                for (XYZPoint candidateReference : candidateScanner.getBeacons()) {
+//                    System.out.println(
+//                            "Checking candidate reference point:\t" +
+//                                    candidateReference.toString());
+                    // Calculate the RELATIVE beacon coordinates TO THAT POINT.
+                    final List<XYZPoint> candidateBeacons =
+                            candidateScanner.getBeaconsToReference(candidateReference);
+                    // See if they match the coordinates of enough reference beacons
+                    final Boolean foundMatchingRotation =
+                            checkAllRotations(referenceBeacons, candidateBeacons);
+                    if (foundMatchingRotation) {
+                        System.out.println("Found a match!");
+                        // If we found a matching rotation, next we need to
+                        // 1. translate all the beacons into "universe" coordinates
+                        //      by moving them relative to the referenceBeacon
+                        // 2. Add them to the known universe
+                        //                candidateBeacons.stream().forEach(xyz -> xyz.translate(referenceBeacon));
+                        //                candidateBeacons.stream().forEach(xyz -> knownUniverse.add(xyz));
+                        candidateBeacons.stream().forEach(xyz -> {
+                            xyz.translate(referenceBeacon);
+                            knownUniverse.add(xyz);
+                            // Finally, remove this scanner from the remaining scanners to check
+                        });
+                        scannersToRemove.add(scannerEntry.getKey());
+                        break;
+                    }
+                }
             }
+            scannersToRemove.stream().forEach(c -> scanners.remove(c));
         }
         // So try again, but with the scanner-1-relative set ROTATED.
 
@@ -109,9 +124,9 @@ public class Day19Service {
                                       final List<XYZPoint> candidateBeacons) {
         for (final RotationStep rotation : allRotations) {
             // Rotate the candidateBeacons into the orientation we're testing
-            System.out.println(
-                    "Rotating around " + rotation.getAxis() + " " + rotation.getTimes() +
-                            " time(s)");
+//            System.out.println(
+//                    "Rotating around " + rotation.getAxis() + " " + rotation.getTimes() +
+//                            " time(s)");
             for (final XYZPoint beacon : candidateBeacons) {
                 beacon.rotate(rotation.getAxis(), rotation.getTimes());
             }
