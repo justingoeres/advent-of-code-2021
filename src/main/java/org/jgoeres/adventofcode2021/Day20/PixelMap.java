@@ -55,6 +55,14 @@ public class PixelMap {
         }
     }
 
+    public void setExtents(final Integer xMin, final Integer xMax,
+                           final Integer yMin, final Integer yMax) {
+        this.xMin = xMin;
+        this.xMax = xMax;
+        this.yMin = yMin;
+        this.yMax = yMax;
+    }
+
     public Set<XYPoint> getMap() {
         return map;
     }

@@ -5,6 +5,8 @@ import java.util.Objects;
 import static org.jgoeres.adventofcode.common.Direction8Way.*;
 
 public class XYPoint {
+    public static final XYPoint ORIGIN_XY = new XYPoint(0, 0);
+
     private int x = 0;
     private int y = 0;
 

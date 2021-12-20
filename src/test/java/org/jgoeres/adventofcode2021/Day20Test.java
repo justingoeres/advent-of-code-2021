@@ -24,7 +24,8 @@ public class Day20Test {
             day20Service = new Day20Service(PUZZLE_INPUT, PUZZLE_DEBUG);
         }
 
-        final long EXPECTED = 0;
+        // 5402 too high
+        final long EXPECTED = 5229;
         long result = 0;
         try {
             result = day20Service.doPartA();
@@ -73,7 +74,9 @@ public class Day20Test {
     @Disabled
     public void Day20BExample1() {
         // Instantiate the service if Part A was skipped
-        if (example1Service == null) example1Service = new Day20Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
+        if (example1Service == null) {
+            example1Service = new Day20Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
+        }
 
         final long EXPECTED = 0;
         long result = 0;

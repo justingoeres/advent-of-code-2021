@@ -1,6 +1,7 @@
 package org.jgoeres.adventofcode2021.Day20;
 
 import static org.jgoeres.adventofcode.common.Direction8Way.*;
+import static org.jgoeres.adventofcode.common.XYPoint.ORIGIN_XY;
 import static org.jgoeres.adventofcode2021.Day20.PixelMap.PIXEL_ON;
 import org.jgoeres.adventofcode.common.Direction8Way;
 import org.jgoeres.adventofcode.common.Utils.Pair;
@@ -9,9 +10,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Day20Service {
@@ -44,16 +42,16 @@ public class Day20Service {
          * How many pixels are lit in the resulting image?
          **/
         for (int i = 0; i < 2; i++) {
-            doTick();
-
-            System.out.println("== After " + (i + 1) + " ticks ==\n" + pixelMap.print() + "\n");
+            doTick(i);
+            System.out.println("== After " + (i + 1) + " ticks ==\n"
+                    + pixelMap.print() + "\n");
         }
         result = pixelMap.getMap().size();
         System.out.println("Day 20A: Answer = " + result);
         return result;
     }
 
-    private void doTick() {
+    private void doTick(Integer count) {
         // The first thing we need to do is figure out which pixels we care about.
         // Every pixel that has at least one neighbor that is ON might need to turn on.
         // Therefore we need to check all of our ON pixels PLUS their 8 neighbors.
@@ -72,6 +70,7 @@ public class Day20Service {
         Integer newXMax = pixelMap.getxMax() + 1;
         Integer newYMin = pixelMap.getyMin() - 1;
         Integer newYMax = pixelMap.getyMax() + 1;
+        pixelMap.setExtents(newXMin, newXMax, newYMin, newYMax);
 
         // Now check the whole search area and use it to determine nextPixelMap
         nextPixelMap.clear();
@@ -81,7 +80,7 @@ public class Day20Service {
                 // For each pixel
                 toCheck.set(x, y);
                 // Check all its neighbors to determine its 'value'
-                Integer value = getPixelValue(toCheck, pixelMap);
+                Integer value = getPixelValue(toCheck, pixelMap, count);
                 // If a pixel of this value is supposed to be ON, add it to the next map
                 if (pixelOnIndex.contains(value)) {
                     nextPixelMap.add(new XYPoint(x, y));
@@ -94,23 +93,31 @@ public class Day20Service {
         nextPixelMap = pixelMapSwap.getSecond();
     }
 
-    private Integer getPixelValue(XYPoint xy, PixelMap pixelMap) {
-        final List<Optional<Direction8Way>> neighbors = List.of(
-                Optional.of(UP_LEFT),
-                Optional.of(UP),
-                Optional.of(UP_RIGHT),
-                Optional.of(LEFT),
-                Optional.empty(),   // self
-                Optional.of(RIGHT),
-                Optional.of(DOWN_LEFT),
-                Optional.of(DOWN),
-                Optional.of(DOWN_RIGHT)
-        );
+    private Integer getPixelValue(XYPoint xy, PixelMap pixelMap, Integer tickCount) {
         Integer value = 0;
         for (Optional<Direction8Way> neighbor : neighbors) {
             value <<= 1;    // shift value, THEN add
-            Boolean isOn = pixelMap.contains(
-                    (neighbor.isPresent()) ? xy.getRelativeLocation8Way(neighbor.get()) : xy);
+            XYPoint neighborXY =
+                    (neighbor.isPresent()) ? xy.getRelativeLocation8Way(neighbor.get()) : xy;
+
+            // A neighbor is ON if the pixelMap contains it - simple!
+            // However! A pixel is ALSO on if
+            //  * our pixelOnIndex has a '#' in position 0, and
+            //  * this pixel was beyond the edge of the known grid last tick, and
+            //  * the tick count is... odd?
+            Boolean isOn = false;
+            if ((tickCount % 2 != 0) && pixelOnIndex.contains(0)) {
+                if ((neighborXY.getX() <= pixelMap.getxMin())
+                        || (neighborXY.getX() >= pixelMap.getxMax())
+                        || (neighborXY.getY() <= pixelMap.getyMin())
+                        || (neighborXY.getY() >= pixelMap.getyMax())) {
+                    isOn = true;
+                } else {
+                    isOn = pixelMap.contains(neighborXY);
+                }
+            } else {
+                isOn = pixelMap.contains(neighborXY);
+            }
             value += isOn ? 1 : 0;
         }
         return value;
@@ -131,9 +138,6 @@ public class Day20Service {
         inputList.clear();
         try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
             String line;
-            Integer nextInt = 0;
-            /** Replace this regex **/
-            Pattern p = Pattern.compile("([FB]{7})([LR]{3})");
             final String firstLine = br.readLine();  // first line is our pixel index
             // Add an item to our index of value -> PIXEL_ON for each '#'
             IntStream.range(0, firstLine.length())
@@ -158,15 +162,15 @@ public class Day20Service {
         }
     }
 
-    private static final List<Direction8Way> neighbors = List.of(
-            UP_LEFT,
-            UP,
-            UP_RIGHT,
-            LEFT,
-//            null,   // self
-            RIGHT,
-            DOWN_LEFT,
-            DOWN,
-            DOWN_RIGHT
+    private static final List<Optional<Direction8Way>> neighbors = List.of(
+            Optional.of(UP_LEFT),
+            Optional.of(UP),
+            Optional.of(UP_RIGHT),
+            Optional.of(LEFT),
+            Optional.empty(),   // self
+            Optional.of(RIGHT),
+            Optional.of(DOWN_LEFT),
+            Optional.of(DOWN),
+            Optional.of(DOWN_RIGHT)
     );
 }
