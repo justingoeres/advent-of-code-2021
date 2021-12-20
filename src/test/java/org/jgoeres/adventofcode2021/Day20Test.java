@@ -18,13 +18,11 @@ public class Day20Test {
     private Day20Service example1Service = null;
 
     @Test
-    @Order(1)   // Run before Puzzle Part B
-    public void Day20A() {
+    public void Day20() {
         if (day20Service == null) {
             day20Service = new Day20Service(PUZZLE_INPUT, PUZZLE_DEBUG);
         }
 
-        // 5402 too high
         final long EXPECTED = 5229;
         long result = 0;
         try {
@@ -34,30 +32,19 @@ public class Day20Test {
             System.out.println(e.getMessage());
         }
         assertEquals(EXPECTED, result);
-    }
 
-    @Test
-    @Order(2)   // Run after Puzzle Part A
-    public void Day20B() {
-        if (day20Service == null) {
-            day20Service = new Day20Service(PUZZLE_INPUT, PUZZLE_DEBUG);
-        }
-
-        final long EXPECTED = 0;
-        long result = 0;
+        final long EXPECTED_PARTB = 17009;
         try {
             result = day20Service.doPartB();
             ToClipboard.set(result);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        assertEquals(EXPECTED, result);
+        assertEquals(EXPECTED_PARTB, result);
     }
 
     @Test
-    @Order(3)   // Run before Example Part B
-    @Disabled
-    public void Day20AExample1() {
+    public void Day20Example1() {
         example1Service = new Day20Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
         final long EXPECTED = 35;
         long result = 0;
@@ -67,24 +54,14 @@ public class Day20Test {
             System.out.println(e.getMessage());
         }
         assertEquals(EXPECTED, result);
-    }
 
-    @Test
-    @Order(4)   // Run after Example Part A
-    @Disabled
-    public void Day20BExample1() {
-        // Instantiate the service if Part A was skipped
-        if (example1Service == null) {
-            example1Service = new Day20Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
-        }
-
-        final long EXPECTED = 0;
-        long result = 0;
+        final long EXPECTED_PARTB = 3351;
         try {
             result = example1Service.doPartB();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        assertEquals(EXPECTED, result);
+        assertEquals(EXPECTED_PARTB, result);
+
     }
 }

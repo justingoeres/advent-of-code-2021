@@ -1,7 +1,6 @@
 package org.jgoeres.adventofcode2021.Day20;
 
 import static org.jgoeres.adventofcode.common.Direction8Way.*;
-import static org.jgoeres.adventofcode.common.XYPoint.ORIGIN_XY;
 import static org.jgoeres.adventofcode2021.Day20.PixelMap.PIXEL_ON;
 import org.jgoeres.adventofcode.common.Direction8Way;
 import org.jgoeres.adventofcode.common.Utils.Pair;
@@ -22,6 +21,8 @@ public class Day20Service {
     private PixelMap nextPixelMap = new PixelMap();
     private final Pair<PixelMap> pixelMapSwap = new Pair(pixelMap, nextPixelMap);
 
+    private Integer tickCount = 0;
+
     public Day20Service(String pathToFile) {
         loadInputs(pathToFile);
     }
@@ -41,13 +42,32 @@ public class Day20Service {
          *
          * How many pixels are lit in the resulting image?
          **/
-        for (int i = 0; i < 2; i++) {
+        int i;
+        for (i = tickCount; i < 2; i++) {
             doTick(i);
-            System.out.println("== After " + (i + 1) + " ticks ==\n"
-                    + pixelMap.print() + "\n");
+//            System.out.println("== After " + (i + 1) + " ticks ==\n"
+//                    + pixelMap.print() + "\n");
         }
+        tickCount = i;
+
         result = pixelMap.getMap().size();
         System.out.println("Day 20A: Answer = " + result);
+        return result;
+    }
+
+    public long doPartB() {
+        System.out.println("=== DAY 20B ===");
+
+        long result = 0;
+        /** How many pixels are lit after *50* ticks? **/
+        for (int i = tickCount; i < 50; i++) {
+            doTick(i);
+//            System.out.println("== After " + (i + 1) + " ticks ==\n"
+//                    + pixelMap.print() + "\n");
+        }
+
+        result = pixelMap.getMap().size();
+        System.out.println("Day 20B: Answer = " + result);
         return result;
     }
 
@@ -121,16 +141,6 @@ public class Day20Service {
             value += isOn ? 1 : 0;
         }
         return value;
-    }
-
-    public long doPartB() {
-        System.out.println("=== DAY 20B ===");
-
-        long result = 0;
-        /** Put problem implementation here **/
-
-        System.out.println("Day 20B: Answer = " + result);
-        return result;
     }
 
     // load inputs line-by-line and apply a regex to extract fields
