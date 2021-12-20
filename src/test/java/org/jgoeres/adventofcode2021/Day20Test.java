@@ -58,7 +58,7 @@ public class Day20Test {
     @Disabled
     public void Day20AExample1() {
         example1Service = new Day20Service(EXAMPLE1_INPUT, EXAMPLE_DEBUG);
-        final long EXPECTED = 0;
+        final long EXPECTED = 35;
         long result = 0;
         try {
             result = example1Service.doPartA();
