@@ -1,6 +1,7 @@
 package org.jgoeres.adventofcode2021.Day19;
 
 import static org.jgoeres.adventofcode.common.XYZPoint.Axis.*;
+import static org.jgoeres.adventofcode.common.XYZPoint.ORIGIN_XYZ;
 import org.jgoeres.adventofcode.common.AoCMath;
 import org.jgoeres.adventofcode.common.RotationStep;
 import org.jgoeres.adventofcode.common.XYZPoint;
@@ -90,9 +91,9 @@ public class Day19Service {
                     //            Scanner candidateScanner = scanners.get(1);
                     Scanner candidateScanner = scannerEntry.getValue();
                     for (XYZPoint candidateReference : candidateScanner.getBeacons()) {
-                        //                    System.out.println(
-                        //                            "Checking candidate reference point:\t" +
-                        //                                    candidateReference.toString());
+//                        System.out.println(
+//                                "Checking candidate reference point:\t" +
+//                                        candidateReference.toString());
                         // Calculate the RELATIVE beacon coordinates TO THAT POINT.
                         final List<XYZPoint> candidateBeacons =
                                 candidateScanner.getBeaconsToReference(candidateReference);
@@ -156,6 +157,7 @@ public class Day19Service {
             // If any match a coordinate in the relative-Scanner-0 list, increment
             // a counter.
             Integer matchCounter = 0;
+            Integer beaconsRemaining = candidateBeacons.size();
             for (final XYZPoint beacon : candidateBeacons) {
                 if (referenceBeacons.contains(beacon)) {
                     matchCounter++;
@@ -165,10 +167,18 @@ public class Day19Service {
 //                                        matchCounter);
 //                    }
                 }
+                beaconsRemaining--;
+//                System.out.println("Remaining to check: " + beaconsRemaining);
                 // Can cut this off early if we need to
                 if (matchCounter >= 12) {
-//                    System.out.println("We found at least 12 matches!!!");
+//                    System.out.println("12 matches found (" + beaconsRemaining + " remaining)");
                     return true; // we found a match!
+                } else if ((beaconsRemaining + matchCounter) < 12) {
+                    // If we don't have enough remaining to possibly match 12
+//                    System.out.println(
+//                            matchCounter + " + " + beaconsRemaining + " --> not enough left");
+                    break;
+//return false;
                 }
             }
         }
