@@ -4,15 +4,22 @@ import org.jgoeres.adventofcode.common.Utils.Pair;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.text.MessageFormat;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Day21Service {
     public boolean DEBUG = false;
 
     private ArrayList<Player> players = new ArrayList<>();
     private Pair<Player> playerPair;
+    private Integer p1Start;
+    private Integer p2Start;
 
     public Day21Service(String pathToFile) {
         loadInputs(pathToFile);
@@ -78,9 +85,107 @@ public class Day21Service {
     public long doPartB() {
         System.out.println("=== DAY 21B ===");
 
-        long result = 0;
-        /** Put problem implementation here **/
+        Long player1WinCount = 0L;
+        Long player2WinCount = 0L;
 
+        /**
+         * Now use a quantum die: when you roll it, the universe splits into multiple copies,
+         * one copy for each possible outcome of the die. In this case, rolling the die always
+         * splits the universe into three copies: one where the outcome of the roll was 1,
+         * one where it was 2, and one where it was 3.
+         **/
+
+        // Create the initial game state (and placeholder for nextGameState)
+        GameState initialGameState = new GameState(p1Start, p2Start);
+        Map<GameState, Long> gameStateCounts = new HashMap<>();
+        Map<GameState, Long> nextGameStateCounts = new HashMap<>();
+        Pair<Map<GameState, Long>> gameStatePair = new Pair(gameStateCounts, nextGameStateCounts);
+
+        // There's one of it
+        gameStateCounts.put(initialGameState, 1L);
+
+        while (!gameStateCounts.isEmpty()) {
+            // Process a turn
+            nextGameStateCounts.clear();
+            // Seed the nextGameState
+            // For each existing game state
+            for (Map.Entry<GameState, Long> gameStateEntry : gameStateCounts.entrySet()) {
+                // Player 1 rolls (and creates 27 *new* (cloned) game states)
+                for (Map.Entry<Integer, Long> newPlayerState : diracRollCounts.entrySet()) {
+                    GameState gameState = gameStateEntry.getKey().clone();
+                    Long currentCount = gameStateCounts.get(gameState);
+                    // There are 27 of these
+                    // Update player1's score & position
+                    Integer rollTotal = newPlayerState.getKey();
+                    Long rollCount = newPlayerState.getValue();
+                    gameState.getPlayer1().doRoll(rollTotal);   // add all 3 rolls as one
+                    gameState.getPlayer1().finishTurn();    // process to update the game state
+
+                    // The count of this new gameState in the nextGameStateCounts is
+                    // The number of counts we ALREADY have for this state
+                    // TIMES the number of new ones (rollCount) we just created
+                    // (PLUS the number of this state we may have ALREADY created in this loop!)
+                    Long newGameStateCount = nextGameStateCounts.getOrDefault(gameState, 0L)
+                            + currentCount * rollCount;
+                    // Did player 1 win?
+                    if (gameState.getPlayer1().hasWon()) {
+                        // DON'T put this game state in nextGameStates because we don't care about it anymore!
+                        // Just add the total to p1's win count
+                        player1WinCount += newGameStateCount;
+                    } else {
+                        // Stick the new value in nextGameStateCounts
+                        nextGameStateCounts.put(gameState, newGameStateCount);
+                    }
+                }
+            }
+
+            // When player 1 is done, swap the gameStates for player 2's turn
+            gameStatePair.swap();
+            gameStateCounts = gameStatePair.getFirst();
+            nextGameStateCounts = gameStatePair.getSecond();
+            // Clear the nextGameStateCounts so we can populate with the new player results
+            nextGameStateCounts.clear();
+
+            for (Map.Entry<GameState, Long> gameStateEntry : gameStateCounts.entrySet()) {
+                // Player 2 rolls (and creates 27 *new* (cloned) game states)
+                for (Map.Entry<Integer, Long> newPlayerState : diracRollCounts.entrySet()) {
+                    GameState gameState = gameStateEntry.getKey().clone();
+                    Long currentCount = gameStateCounts.get(gameState);
+                    // There are 27 of these
+                    // Update player2's score & position
+                    Integer rollTotal = newPlayerState.getKey();
+                    Long rollCount = newPlayerState.getValue();
+                    gameState.getPlayer2().doRoll(rollTotal);   // add all 3 rolls as one
+                    gameState.getPlayer2().finishTurn();    // process to update the game state
+
+                    // The count of this new gameState in the nextGameStateCounts is
+                    // The number of counts we ALREADY have for this state
+                    // TIMES the number of new ones (rollCount) we just created
+                    // (PLUS the number of this state we may have ALREADY created in this loop!)
+                    Long newGameStateCount = nextGameStateCounts.getOrDefault(gameState, 0L)
+                            + currentCount * rollCount;
+                    // Did player 2 win?
+                    if (gameState.getPlayer2().hasWon()) {
+                        // DON'T put this game state in nextGameStates because we don't care about it anymore!
+                        // Just add the total to p2's win count
+                        player2WinCount += newGameStateCount;
+                    } else {
+                        // Stick the new value in nextGameStateCounts
+                        nextGameStateCounts.put(gameState, newGameStateCount);
+                    }
+                }
+            }
+            // When player 2 is done, swap the gameStates for player 1's next turn
+            gameStatePair.swap();
+            gameStateCounts = gameStatePair.getFirst();
+            nextGameStateCounts = gameStatePair.getSecond();
+        }
+
+        /**
+         * Using your given starting positions, determine every possible outcome.
+         * Find the player that wins in more universes; in how many universes does that player win?
+         **/
+        long result = Math.max(player1WinCount, player2WinCount);
         System.out.println("Day 21B: Answer = " + result);
         return result;
     }
@@ -95,7 +200,7 @@ public class Day21Service {
             Matcher m = p.matcher(line);
             m.find();
             // player 1
-            final Integer p1Start = Integer.parseInt(m.group(1));
+            p1Start = Integer.parseInt(m.group(1));
             final Player p1 = new Player(1, p1Start);
             players.add(p1);
 
@@ -103,7 +208,7 @@ public class Day21Service {
             m = p.matcher(line);
             m.find();
             // player 2
-            Integer p2Start = Integer.parseInt(m.group(1));
+            p2Start = Integer.parseInt(m.group(1));
             final Player p2 = new Player(2, p2Start);
             players.add(p2);
 
@@ -112,4 +217,16 @@ public class Day21Service {
             System.out.println("Exception occurred: " + e.getMessage());
         }
     }
+
+    // Static map of roll totals (3-9) and how often they each occur in a series of 3 rolls
+    private static final Map<Integer, Long> diracRollCounts = Stream.of(
+                    new SimpleImmutableEntry<>(3, 1L),
+                    new SimpleImmutableEntry<>(4, 3L),
+                    new SimpleImmutableEntry<>(5, 6L),
+                    new SimpleImmutableEntry<>(6, 7L),
+                    new SimpleImmutableEntry<>(7, 6L),
+                    new SimpleImmutableEntry<>(8, 3L),
+                    new SimpleImmutableEntry<>(9, 1L))
+            .collect(
+                    Collectors.toMap(SimpleImmutableEntry::getKey, SimpleImmutableEntry::getValue));
 }

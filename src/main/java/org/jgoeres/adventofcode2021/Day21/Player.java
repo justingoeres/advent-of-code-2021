@@ -1,26 +1,36 @@
 package org.jgoeres.adventofcode2021.Day21;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 public class Player {
-    private static final Integer targetScore = 1000;
+    private final Integer targetScore;
 
-    private Integer id;
-    private final Integer initialPosition;
+    private final Integer id;
     private Integer score = 0;
     private Integer position;
 
     private List<Integer> rolls = new ArrayList<>();
     private Integer rollTotal = 0;
 
-    public Player(final Integer id, final Integer initialPosition) {
+    public Player(final Integer id, final Integer position) {
         this.id = id;
-        this.initialPosition = initialPosition;
-        this.position = initialPosition;
+        this.position = position;
+        this.targetScore = 1000;
+    }
+
+    public Player(Integer id, Integer position, Integer targetScore) {
+        this.targetScore = targetScore;
+        this.id = id;
+        this.position = position;
+    }
+
+    public Player(Integer id, Integer position, Integer score, Integer targetScore) {
+        this.targetScore = targetScore;
+        this.id = id;
+        this.score = score;
+        this.position = position;
     }
 
     public void doRoll(final Integer roll) {
@@ -60,5 +70,32 @@ public class Player {
 
     public Integer getId() {
         return id;
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public Player clone() {
+        // Return a new player identical to this one
+        return new Player(this.id, this.position, this.score, this.targetScore);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Player player = (Player) o;
+        return targetScore.equals(player.targetScore) && id.equals(player.id) &&
+                score.equals(player.score) && position.equals(player.position);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(targetScore, id, score, position);
     }
 }
